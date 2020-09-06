@@ -4,10 +4,10 @@ from Grid import *
 
 # ---------
 # to be put in a seperate class for all constants later
-SCREEN_WIDTH_AND_HEIGHT = 320
+SCREEN_WIDTH_AND_HEIGHT = 500
 SIZE = SCREEN_WIDTH_AND_HEIGHT, SCREEN_WIDTH_AND_HEIGHT
 
-GRID_BLOCK_SIZE = 20
+GRID_BLOCK_SIZE = 50
 GRID_BLOCK_MARGIN = 5
 
 BLACK = 0, 0, 0
@@ -27,8 +27,8 @@ def main():
     while 1:
         # draw the grid first, with x amount of rows and columns and with different type of terrain in the future, with their own amount of points to move over
         grid = Grid(SCREEN_WIDTH_AND_HEIGHT, 10)
-
-        grid.draw_grid_older(SCREEN, GRID_BLOCK_SIZE)
+        grid.draw_grid_old(SCREEN)
+        # grid.draw_grid_newer(SCREEN, GRID_BLOCK_SIZE)
         # draw_grid(SCREEN)
 
         # monitor events
