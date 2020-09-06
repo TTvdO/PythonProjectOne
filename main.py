@@ -28,7 +28,7 @@ def main():
         # draw the grid first, with x amount of rows and columns and with different type of terrain in the future, with their own amount of points to move over
         grid = Grid(SCREEN_WIDTH_AND_HEIGHT, 10)
 
-        grid.draw_grid_older(SCREEN, SCREEN_WIDTH_AND_HEIGHT, GRID_BLOCK_SIZE, WHITE)
+        grid.draw_grid_older(SCREEN, GRID_BLOCK_SIZE)
         # draw_grid(SCREEN)
 
         # monitor events
