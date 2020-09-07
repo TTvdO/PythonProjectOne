@@ -1,5 +1,4 @@
 import os, pygame
-from Tile import *
 from Grid import *
 
 # ---------
