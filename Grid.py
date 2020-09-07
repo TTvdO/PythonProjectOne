@@ -29,13 +29,13 @@ class Grid:
         # (Zorg dus nog dat je maar 1 start blok hebt)
 
         # algemene blok type definen
-        block = Block()
+        # block = Block()
 
         # nummer genereren van 1 tot 4
 
-        # if nummer == 1: block = Forest
+        # if nummer == 1: block = Forest()
 
-        # elif nummer == 2: block = Ground
+        # elif nummer == 2: block = Ground()
 
         # elif ...
 
@@ -47,23 +47,27 @@ class Grid:
     # also will need to update this grid after every change later on. can do this by calling draw_grid at the end of the while loop in main, but there should be a better way
     # to refresh only the parts of the grid that changed (without refreshing the entirety of the grid)
     def draw_grid(self, screen):
-        for column in range(self.rowsAndColumns):
-            for row in range(self.rowsAndColumns):
+        rowNumber = 0
+        for row in self.grid:
+            elementNumber = 0
+            for element in row:
                 # here the grid contents will be different, and you'll be looping through the in memory grid
                 # you'll be able to do stuff here based on the type of class stored within the grid. (if type X, paint color blue. if type Y, paint color green)
                 # and remember that this is just for visualization purposes, the actual logic will be done by using the in memory grid
-                if type(self.grid[row][column]) is int:
-                    rect = pygame.Rect(column * self.roomPerBlock, row * self.roomPerBlock, self.roomPerBlock, self.roomPerBlock)
+                if type(element) is int:
+                    rect = pygame.Rect(elementNumber * self.roomPerBlock, rowNumber * self.roomPerBlock, self.roomPerBlock, self.roomPerBlock)
                     pygame.draw.rect(screen, WHITE, rect, 1)
-                elif type(self.grid[row][column]) is Ground:
+                elif type(element) is Ground:
                     # draw ground block (simply use a different color at first, then move on to using images)
                     pass
-                elif type(self.grid[row][column]) is Forest:
+                elif type(element) is Forest:
                     # draw forest block (simply use a different color at first, then move on to using images)
                     pass
-                elif type(self.grid[row][column]) is Mountain:
+                elif type(element) is Mountain:
                     # draw mountain block (simply use a different color at first, then move on to using images)
                     pass
                 else: # type is Start (best to use Start as last else, because it only occurs once, so a small amount of time is saved not having to skip it over and over):
                     # draw start block (simply use a different color at first, then move on to using images)
                     pass
+                elementNumber+=1
+            rowNumber+=1
