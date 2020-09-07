@@ -26,7 +26,7 @@ def main():
     # infinite loop for the program to run in until user exits program
     while 1:
         # draw the grid first, with x amount of rows and columns and with different type of terrain in the future, with their own amount of points to move over
-        grid = Grid(SCREEN_WIDTH_AND_HEIGHT, 25)
+        grid = Grid(SCREEN_WIDTH_AND_HEIGHT, 3)
         grid.draw_grid(SCREEN)
 
         # monitor events
