@@ -1,4 +1,13 @@
-class Ground:
+from blocktypes.Block import Block
+
+class Ground(Block):
     def __init__(self):
-        # put characteristics of an individual Tile here in the future, such as x and y, the image belonging to a tile, amount of points to walk over a tile
-        pass
+        super().__init__()
+        self.cost = 1
+        self.image = "empty"
+    
+    def get_cost(self):
+        return self.cost
+
+    def get_image(self):
+        return self.image

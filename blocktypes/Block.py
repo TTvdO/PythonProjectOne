@@ -1,7 +1,15 @@
-# abstract class
+from abc import ABCMeta, abstractmethod
 
-# self.cost attribuut
-# get_cost()
+class Block(object, metaclass=ABCMeta):
+    @abstractmethod
+    def __init__(self):
+        self.cost = 0
+        self.image = ""
 
-# image attribuut
-# get_image()
+    @abstractmethod
+    def get_cost(self):
+        pass
+
+    @abstractmethod
+    def get_image(self):
+        pass

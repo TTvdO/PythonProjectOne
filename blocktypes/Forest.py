@@ -1,3 +1,13 @@
-class Forest():
+from blocktypes.Block import Block
+
+class Forest(Block):
     def __init__(self):
-        pass
+        super().__init__()
+        self.cost = 3
+        self.image = "empty"
+    
+    def get_cost(self):
+        return self.cost
+
+    def get_image(self):
+        return self.image

@@ -20,7 +20,7 @@ def main():
     
     SCREEN = pygame.display.set_mode(SIZE)
 
-    SCREEN.fill(BLACK)
+    SCREEN.fill(WHITE)
 
     # infinite loop for the program to run in until user exits program
     while 1:
