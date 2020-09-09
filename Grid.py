@@ -6,7 +6,6 @@ from blocktypes.Forest import Forest
 from blocktypes.Ground import Ground
 from blocktypes.Mountain import Mountain
 from blocktypes.Start import Start
-from PIL import Image
 
 BLACK = 0, 0, 0
 WHITE = 255, 255, 255
@@ -26,8 +25,11 @@ class Grid:
     #     self.grid = [[self.get_random_block() for x in range(self.rowsAndColumns)] for y in range(self.rowsAndColumns)]
 
     def create_in_memory_grid(self):
-        self.grid = [[Mountain() for x in range(self.rowsAndColumns)] for y in range(self.rowsAndColumns)]
-        # self.create_in_memory_grid_two()
+        self.grid = [[self.get_random_block() for x in range(self.rowsAndColumns)] for y in range(self.rowsAndColumns)]
+
+    # def create_in_memory_grid(self):
+    #     self.grid = [[Mountain() for x in range(self.rowsAndColumns)] for y in range(self.rowsAndColumns)]
+    #     # self.create_in_memory_grid_two()
 
     def create_in_memory_grid_two(self):
         startAlreadyExists = False
@@ -94,35 +96,29 @@ class Grid:
 
     # also will need to update this grid after every change later on. can do this by calling draw_grid at the end of the while loop in main, but there should be a better way
     # to refresh only the parts of the grid that changed (without refreshing the entirety of the grid)
+    # or perhaps this will already be handled within main.py by just refreshing with pygame.display.flip()
     def draw_grid(self, screen):
         rowNumber = 0
         for row in self.grid:
             elementNumber = 0
             for element in row:
-                rect = pygame.Rect(elementNumber * self.roomPerBlock, rowNumber * self.roomPerBlock, self.roomPerBlock, self.roomPerBlock)
-                # here the grid contents will be different, and you'll be looping through the in memory grid
-                # you'll be able to do stuff here based on the type of class stored within the grid. (if type X, paint color blue. if type Y, paint color green)
-                # and remember that this is just for visualization purposes, the actual logic will be done by using the in memory grid
+                left = elementNumber * self.roomPerBlock
+                top = rowNumber * self.roomPerBlock
+                # rect = pygame.Rect(elementNumber * self.roomPerBlock, rowNumber * self.roomPerBlock, self.roomPerBlock, self.roomPerBlock)
+
                 if type(element) is int:
                     pygame.draw.rect(screen, BLACK, rect, 1)
                 elif type(element) is Ground:
-                    # draw ground block (simply use a different color at first, then move on to using images)
-                    pygame.draw.rect(screen, BLACK, rect, 1)
-                    pass
+                    image = pygame.image.load(element.get_image())
+                    screen.blit(image, (left, top))
                 elif type(element) is Forest:
-                    # draw forest block (simply use a different color at first, then move on to using images)
-                    pygame.draw.rect(screen, GREEN, rect, 1)
-                    pass
+                    image = pygame.image.load(element.get_image())
+                    screen.blit(image, (left, top))
                 elif type(element) is Mountain:
-                    # draw mountain block (simply use a different color at first, then move on to using images)
-                    mtnImage = pygame.image.load("images/tile.jpg")
-                    # rect = mtnImage.get_rect()
-                    screen.blit(mtnImage, (100,100))
-                    # pygame.draw.rect(screen, RED, rect, 1)
-                    pass
-                else: # type is Start (best to use Start as last else, because it only occurs once, so a small amount of time is saved not having to skip it over and over):
-                    # draw start block (simply use a different color at first, then move on to using images)
-                    pygame.draw.rect(screen, RANDOM, rect, 1)
-                    pass
+                    image = pygame.image.load(element.get_image())
+                    screen.blit(image, (left, top))
+                else: # type is Start
+                    image = pygame.image.load(element.get_image())
+                    screen.blit(image, (left, top))
                 elementNumber+=1
             rowNumber+=1

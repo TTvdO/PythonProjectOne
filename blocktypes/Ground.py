@@ -4,7 +4,7 @@ class Ground(Block):
     def __init__(self):
         super().__init__()
         self.cost = 1
-        self.image = "empty"
+        self.image = "images/ground.jpg"
     
     def get_cost(self):
         return self.cost
