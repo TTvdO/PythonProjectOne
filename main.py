@@ -32,6 +32,12 @@ def main():
             # exit when clicking on the X of the pop-up window
             if event.type == pygame.QUIT: os._exit(1)
         
+        # want to draw over the existing grid. Criteria:
+        # - amount drawn needs to have width and height of grid.get_room_per_block(), need to update draw_green_image() method for this to happen
+        # - need to be able to access X and Y coordinates of different blocks, so that you can call this method to paint over specific blocks that you move over
+        #       (perhaps this is functionality that already belongs to movement algorithm implementations and shouldn't be implemented yet)
+        grid.draw_green_image(SCREEN, (100, 100))
+
         # update screen based on inputs
         pygame.display.flip()
 
