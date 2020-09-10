@@ -6,12 +6,8 @@ from blocktypes.Forest import Forest
 from blocktypes.Ground import Ground
 from blocktypes.Mountain import Mountain
 from blocktypes.Start import Start
-
-BLACK = 0, 0, 0
-WHITE = 255, 255, 255
-RED = 255, 0, 0
-GREEN = 0, 255, 0
-RANDOM = 122, 155, 188
+from blocktypes.End import End
+from Constants import Constants
 
 class Grid:
     def __init__(self, screenWidthAndHeight, rowsAndColumns):
@@ -28,22 +24,31 @@ class Grid:
         self.grid = [[self.get_random_block() for x in range(self.rowsAndColumns)] for y in range(self.rowsAndColumns)]
 
     def get_random_block(self):
-        randomNumber = random.randrange(1, 5, 1)
+        randomNumber = random.randrange(1, 48, 1)
         # Create starting point at the middle position or slightly before (depending on even or uneven amount of rows) if no starting point
         # has been created yet before then
-        if (self.amountOfBlocksCreated >= (self.rowsAndColumns * (self.rowsAndColumns // 2))) and self.hasStartingPoint == False:
+        if (self.amountOfBlocksCreated == ((self.rowsAndColumns * self.rowsAndColumns) - 2)) and self.hasStartingPoint == False:
             block = Start()
             self.hasStartingPoint = True
-        elif randomNumber == 1:
+        elif (self.amountOfBlocksCreated == ((self.rowsAndColumns * self.rowsAndColumns) - 1)) and self.hasEndPoint == False:
+            block = End()
+            self.hasEndPoint = True
+        elif randomNumber >= 1 and randomNumber <= 15:
             block = Forest()
-        elif randomNumber == 2:
+        elif randomNumber > 15 and randomNumber <= 30:
             block = Ground()
-        elif randomNumber == 3:
+        elif randomNumber > 30 and randomNumber <= 45:
             block = Mountain()
-        else:
+        elif randomNumber == 46:
             if self.hasStartingPoint == False:
                 block = Start()
                 self.hasStartingPoint = True
+            else:
+                block = Ground()
+        else:
+            if self.hasEndPoint == False:
+                block = End()
+                self.hasEndPoint = True
             else:
                 block = Ground()
         self.amountOfBlocksCreated+=1
@@ -59,19 +64,17 @@ class Grid:
             for element in row:
                 left = elementNumber * self.roomPerBlock
                 top = rowNumber * self.roomPerBlock
-                #  rect = pygame.Rect(elementNumber * self.roomPerBlock, rowNumber * self.roomPerBlock, self.roomPerBlock, self.roomPerBlock)
 
                 if type(element) is Ground:
-                    # image = pygame.image.load(element.get_image())
-                    # screen.blit(image, (left, top))
                     self.load_and_draw_block_img(screen, element, (left, top))
                 elif type(element) is Forest:
                     self.load_and_draw_block_img(screen, element, (left, top))
                 elif type(element) is Mountain:
                     self.load_and_draw_block_img(screen, element, (left, top))
-                else: # type is Start
+                elif type(element) is Start:
                     self.load_and_draw_block_img(screen, element, (left, top))
-                    # self.draw_green_image(screen, (left, top))
+                else: # type is End
+                    self.load_and_draw_block_img(screen, element, (left, top))
                 elementNumber+=1
             rowNumber+=1
 
@@ -86,12 +89,12 @@ class Grid:
         greenImage = pygame.image.load("images/green.jpg")
         greenImageScaled = pygame.transform.scale(greenImage, (int(self.roomPerBlock), int(self.roomPerBlock)))
         screen.blit(greenImageScaled, posXandYtuple)
-        # value "0101" to be replaced by future value "totalCost", which is going to be the cost of having traversed different blocks at a certain point in time
+        # value "0101" to be replaced by future value "totalCost", which is going to be the sum of the costs of traversed blocks
         self.draw_text(screen, posXandYtuple, "0101")
 
     def draw_text(self, screen, posXandYtuple, text):
         myfont = pygame.font.SysFont("Comic Sans MS", (int(self.roomPerBlock / 3)))
-        label = myfont.render(f"{text}", 0, RED)
+        label = myfont.render(f"{text}", 0, Constants.RED)
         screen.blit(label, (posXandYtuple[0] + int(self.roomPerBlock / 2.5), posXandYtuple[1] + int(self.roomPerBlock / 4)))
 
     def get_room_per_block(self):

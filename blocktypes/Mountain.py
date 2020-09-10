@@ -1,11 +1,11 @@
 from blocktypes.Block import Block
+from Constants import Constants
 
 class Mountain(Block):
     def __init__(self):
         super().__init__()
         self.cost = 5
-        # image path is based on the location of loading the file. quite confusing, but the file is loaded within Grid.py, so teh path images/mountain.jpg is correct from there.
-        self.image = "images/mountain.jpg"
+        self.image = Constants.MOUNTAIN_IMAGE
     
     def get_cost(self):
         return self.cost
