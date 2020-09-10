@@ -79,22 +79,19 @@ class Grid:
         image = pygame.image.load(element.get_image())
         imageScaled = pygame.transform.scale(image, (int(self.roomPerBlock), int(self.roomPerBlock)))
         screen.blit(imageScaled, posXandYtuple)
+        self.draw_text(screen, posXandYtuple, f"{element.get_cost()}")
 
-        # write text
-        myfont = pygame.font.SysFont("Comic Sans MS", (int(self.roomPerBlock / 3)))
-        label = myfont.render(f"{element.get_cost()}", 0, RED)
-        screen.blit(label, (posXandYtuple[0] + int(self.roomPerBlock / 2.5), posXandYtuple[1] + int(self.roomPerBlock / 4)))
-        # screen.blit(label, (self.roomPerBlock // 5 + int(posXandYtuple[0])), (self.roomPerBlock // 5 + int(posXandYtuple[1])))
-
-    # can be used to show what path you've taken in the future. might be replaced with another way of doing it, but for now
-    # just draw a green image over the existing image. will call this method when moving with any movement algorithm
+    # can be used to show what path you've taken in the future.
     def draw_green_image(self, screen, posXandYtuple):
         greenImage = pygame.image.load("images/green.jpg")
         greenImageScaled = pygame.transform.scale(greenImage, (int(self.roomPerBlock), int(self.roomPerBlock)))
         screen.blit(greenImageScaled, posXandYtuple)
+        # value "0101" to be replaced by future value "totalCost", which is going to be the cost of having traversed different blocks at a certain point in time
+        self.draw_text(screen, posXandYtuple, "0101")
 
+    def draw_text(self, screen, posXandYtuple, text):
         myfont = pygame.font.SysFont("Comic Sans MS", (int(self.roomPerBlock / 3)))
-        label = myfont.render(f"{1}", 0, RED)
+        label = myfont.render(f"{text}", 0, RED)
         screen.blit(label, (posXandYtuple[0] + int(self.roomPerBlock / 2.5), posXandYtuple[1] + int(self.roomPerBlock / 4)))
 
     def get_room_per_block(self):
