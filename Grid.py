@@ -59,29 +59,43 @@ class Grid:
             for element in row:
                 left = elementNumber * self.roomPerBlock
                 top = rowNumber * self.roomPerBlock
-                rect = pygame.Rect(elementNumber * self.roomPerBlock, rowNumber * self.roomPerBlock, self.roomPerBlock, self.roomPerBlock)
+                #  rect = pygame.Rect(elementNumber * self.roomPerBlock, rowNumber * self.roomPerBlock, self.roomPerBlock, self.roomPerBlock)
 
                 if type(element) is Ground:
-                    image = pygame.image.load(element.get_image())
-                    screen.blit(image, (left, top))
+                    # image = pygame.image.load(element.get_image())
+                    # screen.blit(image, (left, top))
+                    self.load_and_draw_block_img(screen, element, (left, top))
                 elif type(element) is Forest:
-                    image = pygame.image.load(element.get_image())
-                    screen.blit(image, (left, top))
+                    self.load_and_draw_block_img(screen, element, (left, top))
                 elif type(element) is Mountain:
-                    image = pygame.image.load(element.get_image())
-                    screen.blit(image, (left, top))
+                    self.load_and_draw_block_img(screen, element, (left, top))
                 else: # type is Start
-                    image = pygame.image.load(element.get_image())
-                    screen.blit(image, (left, top))
+                    self.load_and_draw_block_img(screen, element, (left, top))
                     # self.draw_green_image(screen, (left, top))
                 elementNumber+=1
             rowNumber+=1
+
+    def load_and_draw_block_img(self, screen, element, posXandYtuple):
+        image = pygame.image.load(element.get_image())
+        imageScaled = pygame.transform.scale(image, (int(self.roomPerBlock), int(self.roomPerBlock)))
+        screen.blit(imageScaled, posXandYtuple)
+
+        # write text
+        myfont = pygame.font.SysFont("Comic Sans MS", (int(self.roomPerBlock / 3)))
+        label = myfont.render(f"{element.get_cost()}", 0, RED)
+        screen.blit(label, (posXandYtuple[0] + int(self.roomPerBlock / 2.5), posXandYtuple[1] + int(self.roomPerBlock / 4)))
+        # screen.blit(label, (self.roomPerBlock // 5 + int(posXandYtuple[0])), (self.roomPerBlock // 5 + int(posXandYtuple[1])))
 
     # can be used to show what path you've taken in the future. might be replaced with another way of doing it, but for now
     # just draw a green image over the existing image. will call this method when moving with any movement algorithm
     def draw_green_image(self, screen, posXandYtuple):
         greenImage = pygame.image.load("images/green.jpg")
-        screen.blit(greenImage, posXandYtuple)
+        greenImageScaled = pygame.transform.scale(greenImage, (int(self.roomPerBlock), int(self.roomPerBlock)))
+        screen.blit(greenImageScaled, posXandYtuple)
 
-    def get_room_per_block():
+        myfont = pygame.font.SysFont("Comic Sans MS", (int(self.roomPerBlock / 3)))
+        label = myfont.render(f"{1}", 0, RED)
+        screen.blit(label, (posXandYtuple[0] + int(self.roomPerBlock / 2.5), posXandYtuple[1] + int(self.roomPerBlock / 4)))
+
+    def get_room_per_block(self):
         return self.roomPerBlock
