@@ -6,7 +6,7 @@ class Constants:
     RANDOM = 122, 155, 188
 
     SCREEN_WIDTH_AND_HEIGHT = 500
-    SIZE = SCREEN_WIDTH_AND_HEIGHT, SCREEN_WIDTH_AND_HEIGHT
+    SCREEN = SCREEN_WIDTH_AND_HEIGHT, SCREEN_WIDTH_AND_HEIGHT
 
     # based on which file the image is loaded in. Currently grid.py has the responsibility for this. In the future this will be changed
     END_IMAGE = "images/end.jpg"
