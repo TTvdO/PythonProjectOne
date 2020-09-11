@@ -45,7 +45,7 @@ class Draw:
 
     # can be used to show what path you've taken in the future. (not used yet)
     def draw_green_image(self, posXandYtuple):
-        greenImage = pygame.image.load("images/green.jpg")
+        greenImage = pygame.image.load(Constants.GREEN_IMAGE)
         greenImageScaled = pygame.transform.scale(greenImage, (int(self.roomPerBlock), int(self.roomPerBlock)))
         self.screen.blit(greenImageScaled, posXandYtuple)
         # value "0101" to be replaced by future value "totalCost", which is going to be the sum of the costs of traversed blocks

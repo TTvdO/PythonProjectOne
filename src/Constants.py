@@ -15,5 +15,7 @@ class Constants:
     MOUNTAIN_IMAGE = "src/images/mountain.jpg"
     START_IMAGE = "src/images/start.jpg"
 
+    GREEN_IMAGE = "src/images/green.jpg"
+
     def __init__(self):
         pass
