@@ -5,7 +5,7 @@ class End(Block):
     def __init__(self):
         super().__init__()
         self.cost = 10
-        self.image = Constants.END_IMAGE
+        self.image = super().transform_image_path(Constants.END_IMAGE)
     
     def get_cost(self):
         return self.cost

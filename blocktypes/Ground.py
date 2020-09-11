@@ -5,7 +5,7 @@ class Ground(Block):
     def __init__(self):
         super().__init__()
         self.cost = 1
-        self.image = Constants.GROUND_IMAGE
+        self.image = super().transform_image_path(Constants.GROUND_IMAGE)
     
     def get_cost(self):
         return self.cost

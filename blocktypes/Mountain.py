@@ -5,7 +5,7 @@ class Mountain(Block):
     def __init__(self):
         super().__init__()
         self.cost = 5
-        self.image = Constants.MOUNTAIN_IMAGE
+        self.image = super().transform_image_path(Constants.MOUNTAIN_IMAGE)
     
     def get_cost(self):
         return self.cost

@@ -5,7 +5,7 @@ class Forest(Block):
     def __init__(self):
         super().__init__()
         self.cost = 3
-        self.image = Constants.FOREST_IMAGE
+        self.image = super().transform_image_path(Constants.FOREST_IMAGE)
     
     def get_cost(self):
         return self.cost

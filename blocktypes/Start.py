@@ -5,7 +5,7 @@ class Start(Block):
     def __init__(self):
         super().__init__()
         self.cost = 0
-        self.image = Constants.START_IMAGE
+        self.image = super().transform_image_path(Constants.START_IMAGE)
     
     def get_cost(self):
         return self.cost

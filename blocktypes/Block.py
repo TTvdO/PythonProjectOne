@@ -1,12 +1,16 @@
 from abc import ABCMeta, abstractmethod
+import os
 
 class Block(object, metaclass=ABCMeta):
     @abstractmethod
     def __init__(self):
         self.cost = 0
-        # image path is based on the location of loading the file. For now it's only being loaded within Grid.py, so the paths within Constants.py are fine
-        # in the future, change it
         self.image = ""
+
+    # instead of specifying a route to the image ("/images/...") where successful loading depends on the location within the code the file is being opened, 
+    # transform the image path to an absolute one (C//Users//....) that can be used anywhere within the code successfully
+    def transform_image_path(self, file):
+        return os.path.realpath(file)
 
     @abstractmethod
     def get_cost(self):
