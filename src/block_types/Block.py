@@ -17,5 +17,9 @@ class Block(object, metaclass=ABCMeta):
         pass
 
     @abstractmethod
+    def set_cost(self):
+        pass
+
+    @abstractmethod
     def get_image(self):
         pass

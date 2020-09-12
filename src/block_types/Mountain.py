@@ -10,5 +10,8 @@ class Mountain(Block):
     def get_cost(self):
         return self.cost
 
+    def get_cost(self, cost):
+        self.cost = cost
+
     def get_image(self):
         return self.image
