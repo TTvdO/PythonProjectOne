@@ -8,7 +8,7 @@ class Constants:
     SCREEN_WIDTH_AND_HEIGHT = 500
     SCREEN = SCREEN_WIDTH_AND_HEIGHT, SCREEN_WIDTH_AND_HEIGHT
 
-    # all image URLs get transformed within Block.py, so that the path is similar to "C//Users//...." instead of the format below
+    # all image URLs get transformed within Node.py, so that the path is similar to "C//Users//...." instead of the format below
     END_IMAGE = "src/images/end.jpg"
     FOREST_IMAGE = "src/images/forest.jpg"
     GROUND_IMAGE = "src/images/ground.jpg"
@@ -16,6 +16,14 @@ class Constants:
     START_IMAGE = "src/images/start.jpg"
 
     GREEN_IMAGE = "src/images/green.jpg"
+    RED_IMAGE = "src/images/red.jpg"
+    BLACK_IMAGE = "src/images/black.jpg"
+
+    DIJKSTRA = "Dijkstra"
+    BFS = "BFS"
+
+    # "Dijkstra", "BFS", ""
+    TO_RUN = BFS
 
     def __init__(self):
         pass

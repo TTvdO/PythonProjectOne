@@ -1,3 +1,3 @@
 # PythonProjectOne
 
-Visualization and implementation of the A* movement algorithm 
+Visualization and implementation of various traversal algorithms
