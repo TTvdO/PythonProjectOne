@@ -22,7 +22,7 @@ class Grid:
 
     def create_in_memory_grid(self):
         self.grid = [[self.get_random_block(x, y) for x in range(self.rowsAndColumns)] for y in range(self.rowsAndColumns)]
-        
+
     def get_random_block(self, x, y):
         randomNumber = random.randrange(1, 48, 1)
         # Create starting point at one index before the last if no starting point has been created yet before then

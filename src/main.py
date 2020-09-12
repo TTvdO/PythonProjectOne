@@ -2,13 +2,12 @@ import os, pygame
 from Grid import *
 from Constants import Constants
 from Draw import Draw
-# from movement_algorithms.Dijkstra import Dijkstra
+# from traversal_algorithms.Dijkstra import Dijkstra
 
 def main():
     pygame.init()
     
     SCREEN = pygame.display.set_mode(Constants.SCREEN)
-
     SCREEN.fill(Constants.WHITE)
 
     grid = Grid(Constants.SCREEN_WIDTH_AND_HEIGHT, 10)
