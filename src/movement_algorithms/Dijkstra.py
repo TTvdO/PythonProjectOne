@@ -11,9 +11,11 @@ from block_types.End import End
 
 class Dijkstra:
     def __init__(self, grid):
-        # use grid to get the actual costs of nodes within the Graph
+        # use grid to get the actual costs of nodes within the Graph, 
+        # to call the "draw_green_image()" method on nodes you're adding to the visitedList,
+        # and to call the "set_cost" method on nodes you're adding to the visitedList 
         self.grid = grid
-        # use copyOfGrid to modify the costs of terrain temporarily
+        # use copyOfGrid to modify the costs of terrain temporarily within the unvisitedList
         self.copyOfGrid = self.grid
         self.unvisitedList = []
         self.visitedList = []
@@ -35,8 +37,8 @@ class Dijkstra:
                     self.unvisitedList.append(element)
                 else:
                     self.visitedList.append(element)
-                    currentX = element
-                    currentY = row
+                    currentX = element  # moet worden: currentX = element.posXandYtuple[0]
+                    currentY = row      # moet worden: currentY = element.posXandYtuple[1]
 
         # 2. be able to set_cost of terrain for the Grid that the Dijkstra algorithm uses
         # make the cost of any terrain other than the starting position infinite (a.k.a. very high)

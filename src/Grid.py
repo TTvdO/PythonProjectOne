@@ -17,6 +17,7 @@ class Grid:
         self.hasStartingPoint = False
         self.hasEndPoint = False
         self.amountOfBlocksCreated = 0
+        self.amountOfTimesCalled = 0
 
         self.create_in_memory_grid()
 
@@ -28,11 +29,16 @@ class Grid:
     # might need help from create_in_memory_grid
     def get_random_block(self):
         randomNumber = random.randrange(1, 48, 1)
-        # Create starting point at the middle position or slightly before (depending on even or uneven amount of rows) if no starting point
-        # has been created yet before then
+        
+        # wat als je 100 rowsAndColumns hebt, hoe hou je dan bij welke row en column het is
+        # dan kan je niet zomaar zeggen if self.amountOfTimesCalled < self.rowsAndColumns: row = 0 elif self.amountOfTimesCalled < (2 * self.rowsAndColumns): row = 1, etc
+        # 
+
+        # Create starting point at one index before the last if no starting point has been created yet before then
         if (self.amountOfBlocksCreated == ((self.rowsAndColumns * self.rowsAndColumns) - 2)) and self.hasStartingPoint == False:
             block = Start()
             self.hasStartingPoint = True
+        # Create end point at the last index if no end point has been created yet before then
         elif (self.amountOfBlocksCreated == ((self.rowsAndColumns * self.rowsAndColumns) - 1)) and self.hasEndPoint == False:
             block = End()
             self.hasEndPoint = True
@@ -55,6 +61,7 @@ class Grid:
             else:
                 block = Ground()
         self.amountOfBlocksCreated+=1
+        self.amountOfTimesCalled+=1
         return block
 
     def get_room_per_block(self):
