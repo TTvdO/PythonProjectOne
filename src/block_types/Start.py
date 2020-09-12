@@ -1,11 +1,11 @@
-from blocktypes.Block import Block
+from block_types.Block import Block
 from Constants import Constants
 
-class End(Block):
+class Start(Block):
     def __init__(self):
         super().__init__()
-        self.cost = 10
-        self.image = super().transform_image_path(Constants.END_IMAGE)
+        self.cost = 0
+        self.image = super().transform_image_path(Constants.START_IMAGE)
     
     def get_cost(self):
         return self.cost

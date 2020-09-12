@@ -1,11 +1,11 @@
 import pygame
-from blocktypes import *
-from blocktypes.Block import Block
-from blocktypes.Forest import Forest
-from blocktypes.Ground import Ground
-from blocktypes.Mountain import Mountain
-from blocktypes.Start import Start
-from blocktypes.End import End
+from block_types import *
+from block_types.Block import Block
+from block_types.Forest import Forest
+from block_types.Ground import Ground
+from block_types.Mountain import Mountain
+from block_types.Start import Start
+from block_types.End import End
 from Constants import Constants
 
 class Draw:

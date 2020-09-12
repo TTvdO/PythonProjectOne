@@ -1,4 +1,4 @@
-from blocktypes.Block import Block
+from block_types.Block import Block
 from Constants import Constants
 
 class Mountain(Block):

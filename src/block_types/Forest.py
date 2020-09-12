@@ -1,11 +1,11 @@
-from blocktypes.Block import Block
+from block_types.Block import Block
 from Constants import Constants
 
-class Start(Block):
+class Forest(Block):
     def __init__(self):
         super().__init__()
-        self.cost = 0
-        self.image = super().transform_image_path(Constants.START_IMAGE)
+        self.cost = 3
+        self.image = super().transform_image_path(Constants.FOREST_IMAGE)
     
     def get_cost(self):
         return self.cost
