@@ -37,7 +37,7 @@ class Dijkstra:
                 if type(element) is not Start:
                     element.set_cost(9999)
                     self.unvisitedList.append(element)
-                else:
+                else: #type is Start
                     self.visitedList.append(element)
                     self.currentNode = element
 
@@ -48,18 +48,20 @@ class Dijkstra:
         # 3. for the current node, look at all of its unvisited neighbors and consider them (move to all of the adjacent neighbours)
         # if current position A is marked with a distance of 6 and the edge connecting it with a neighbour B has a value of 2, then
         # distance to B is 6+2=8. IF B was previously marked higher than 8 (through traversing with a different route), then change the cost to 8
+
+        # TODO STILL IN THIS WHILE LOOP:
+        #   - call the method to draw a green block whenever you have added an element to the visitedList. use the element's x and y coordinates as arguments
+        #   - also the cost of that element on top of the method to draw a green block, this can be done by calling element.get_cost() from the element within the list after you have
+        #       added it to the visitedList
+
+        # TODO STILL WITHIN THE APPLICATION:
+        #   - initialize the Dijkstra class within 'main' 
+        #   - use this Dijkstra move method within the while loop of 'main'
         while not self.endPointReached:
             counter = 0
-            # for element in unvisitedList with the lowest total cost
             for element in self.unvisitedList:
-                # check if element in unvisitedList is adjacten to currentNode
                 if self.element_adjacent_to_current_node:
                     if type(element) is not End:
-                        # ergens in de method, weet niet of het hier is of niet, moet je nog hiervoor zorgen:
-                        # je wilt een lowestCost onthouden in deze klasse naast de currentCost. telkens nadat je element.cost hebt geupdate met currentCost + de cost van het element
-                        # in de echte grid, wil je kijken of currentCost < lowestCost. wel moet je dan telkens, de eerste keer als je naar 1 van de adjactent elements kijkt, niet eens
-                        # checken of currentCost < lowestCost, maar direct zeggen lowestCost = currentCost, anders krijg je natuurlijk altijd false
-
                         if counter == 0:
                             element.set_cost(self.currentCost + self.grid[element.get_x()][element.get_y()].get_cost())
                             self.lowestCost = element.get_cost()
@@ -67,25 +69,24 @@ class Dijkstra:
                             self.visitedList.append(element)
                             self.unvisitedList.remove(element)
 
-                        # je wilt ook nog ergens hierin kijken welke van de 4 adjacent elements de laagste cost had en deze selecteer je als volgende currentNode,
-                        # noem dit variabel nextCurrentNode en nadat de counter 4 is zeg je currentNode = nextCurrentNode
-
-                        # je wilt ook de currentCost updaten telkens als je weer voor een nieuwe currentNode de costs van de adjacent elements wil comparen 
-                        elif counter > 0 and counter < 4:
+                        else:
                             element.set_cost(self.currentCost + self.grid[element.get_x()][element.get_y()].get_cost())
                             if element.get_cost() < self.lowestCost:
                                 self.lowestCost = element.get_cost()
                                 self.nextCurrentNode = element
                             self.visitedList.append(element)
                             self.unvisitedList.remove(element)
-                        else: #if counter = 4 (mss moet dit 3 zijn, nog even kijken naar de logica zometeen)
-                            self.currentNode = self.nextCurrentNode
-
+                            # if 3 previous adjacent elements have been evaluated before this element, then this element is the 4th and final element to be evaluated
+                            # for the currentNode's position
+                            if counter == 3:
+                                self.currentNode = self.nextCurrentNode
                     else # if element is of type End:
                         element.cost = self.currentCost + element.get_cost()
                         self.endpointReached = True
+                        # TODO:
+                            # - show total cost somewhere
                     counter+=1
-                    
+
         # 4. when done with considering unvisited neighbours of the current node, mark the current node as visited and remove it from the unvisited set
         # a visited node will never be checked again (because you will loop through the unvisited set)
         # [DONE]
