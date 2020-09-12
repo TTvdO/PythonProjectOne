@@ -24,12 +24,12 @@ class Grid:
     def create_in_memory_grid(self):
         # je kan hier het best de x en y doorgeven. als dat niet kan met deze syntax, moet je hier een dubbele for loop van maken om de x en y door te kunnen geven
         # aan de self.get_random_block() method
-        self.grid = [[self.get_random_block() for x in range(self.rowsAndColumns)] for y in range(self.rowsAndColumns)]
+        self.grid = [[self.get_random_block(x, y) for x in range(self.rowsAndColumns)] for y in range(self.rowsAndColumns)]
 
     # within this method, you want to not only create a certain Terrain, but you want to give an X and Y value to the terrain created in the constructor.
     # so keep track of the self.rowsAndColumns attribute and make sure that the X and Y values are correctly updated throughout the method.
     # might need help from create_in_memory_grid
-    def get_random_block(self):
+    def get_random_block(self, x, y):
         randomNumber = random.randrange(1, 48, 1)
         # Create starting point at one index before the last if no starting point has been created yet before then
         if (self.amountOfBlocksCreated == ((self.rowsAndColumns * self.rowsAndColumns) - 2)) and self.hasStartingPoint == False:

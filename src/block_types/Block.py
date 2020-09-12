@@ -3,9 +3,9 @@ import os
 
 class Block(object, metaclass=ABCMeta):
     @abstractmethod
-    def __init__(self):
-        # self.x = x
-        # self.y = y
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
         self.cost = 0
         self.image = ""
 
@@ -14,20 +14,17 @@ class Block(object, metaclass=ABCMeta):
     def transform_image_path(self, file):
         return os.path.realpath(file)
     
-    # def get_x(self):
-    #     return self.x
+    def get_x(self):
+        return self.x
 
-    # def get_y(self):
-    #     return self.y
+    def get_y(self):
+        return self.y
 
-    @abstractmethod
     def get_cost(self):
-        pass
+        return self.cost
+        
+    def set_cost(self, cost):
+        self.cost = cost
 
-    @abstractmethod
-    def set_cost(self):
-        pass
-
-    @abstractmethod
     def get_image(self):
-        pass
+        return self.image

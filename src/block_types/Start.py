@@ -6,12 +6,3 @@ class Start(Block):
         super().__init__()
         self.cost = 0
         self.image = super().transform_image_path(Constants.START_IMAGE)
-    
-    def get_cost(self):
-        return self.cost
-
-    def set_cost(self, cost):
-        self.cost = cost
-
-    def get_image(self):
-        return self.image
