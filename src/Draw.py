@@ -24,16 +24,7 @@ class Draw:
             for element in row:
                 left = elementNumber * self.roomPerBlock
                 top = rowNumber * self.roomPerBlock
-                if type(element) is Ground:
-                    self.load_and_draw_block_img(element, (left, top))
-                elif type(element) is Forest:
-                    self.load_and_draw_block_img(element, (left, top))
-                elif type(element) is Mountain:
-                    self.load_and_draw_block_img(element, (left, top))
-                elif type(element) is Start:
-                    self.load_and_draw_block_img(element, (left, top))
-                else: # type is End
-                    self.load_and_draw_block_img(element, (left, top))
+                self.load_and_draw_block_img(element, (left, top))
                 elementNumber+=1
             rowNumber+=1
 

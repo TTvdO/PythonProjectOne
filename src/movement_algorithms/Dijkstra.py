@@ -22,10 +22,8 @@ class Dijkstra:
         self.endPointReached = false
 
     def move(self):
-        # have exact copy of the Grid available within this class (the Grid is the same as the Graph within the theory of Dijkstra),
-        # all positions have x and y coordinates and you are able to traverse bidirectionally (up/down, left/right by looping through columns and rows)
-
         # mark X and Y position of current node, keep this updated
+        # update: won't need this once you have X and Y tuples within the block classes that reside within the Grid
         currentX = 0
         currentY = 0
 
