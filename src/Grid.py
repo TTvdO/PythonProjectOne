@@ -33,30 +33,30 @@ class Grid:
         randomNumber = random.randrange(1, 48, 1)
         # Create starting point at one index before the last if no starting point has been created yet before then
         if (self.amountOfBlocksCreated == ((self.rowsAndColumns * self.rowsAndColumns) - 2)) and self.hasStartingPoint == False:
-            block = Start()
+            block = Start(x, y)
             self.hasStartingPoint = True
         # Create end point at the last index if no end point has been created yet before then
         elif (self.amountOfBlocksCreated == ((self.rowsAndColumns * self.rowsAndColumns) - 1)) and self.hasEndPoint == False:
-            block = End()
+            block = End(x, y)
             self.hasEndPoint = True
         elif randomNumber >= 1 and randomNumber <= 15:
-            block = Forest()
+            block = Forest(x, y)
         elif randomNumber > 15 and randomNumber <= 30:
-            block = Ground()
+            block = Ground(x, y)
         elif randomNumber > 30 and randomNumber <= 45:
-            block = Mountain()
+            block = Mountain(x, y)
         elif randomNumber == 46:
             if self.hasStartingPoint == False:
-                block = Start()
+                block = Start(x, y)
                 self.hasStartingPoint = True
             else:
-                block = Ground()
+                block = Ground(x, y)
         else:
             if self.hasEndPoint == False:
-                block = End()
+                block = End(x, y)
                 self.hasEndPoint = True
             else:
-                block = Ground()
+                block = Ground(x, y)
         self.amountOfBlocksCreated+=1
         self.amountOfTimesCalled+=1
         return block
