@@ -2,7 +2,7 @@ import os, pygame
 from Grid import *
 from Constants import Constants
 from Draw import Draw
-# from traversal_algorithms.Dijkstra import Dijkstra
+from traversal_algorithms.Dijkstra import Dijkstra
 
 def main():
     pygame.init()
@@ -14,7 +14,9 @@ def main():
     draw = Draw(SCREEN, grid.get_grid(), grid.get_room_per_block())
     draw.draw_grid()
 
-    # dijkstra = Dijkstra(grid)
+    dijkstra = Dijkstra(grid.get_grid())
+
+    dijkstra.move()
 
     # infinite loop for the program to run in until user exits program
     while 1:

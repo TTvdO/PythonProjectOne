@@ -9,6 +9,7 @@ from block_types.Ground import Ground
 from block_types.Mountain import Mountain
 from block_types.Start import Start
 from block_types.End import End
+import copy
 
 class Dijkstra:
     def __init__(self, grid):
@@ -17,25 +18,26 @@ class Dijkstra:
         # and to call the "set_cost" method on nodes you're adding to the visitedList 
         self.grid = grid
         # use copyOfGrid to modify the costs of terrain temporarily within the unvisitedList
-        self.copyOfGrid = self.grid
+        # self.copyOfGrid = deepcopy(self.grid)
 
         self.unvisitedList = []
         self.visitedList = []
 
         self.lowestCost = 0
         self.currentCost = 0
+        self.counter = 0
 
-        self.endPointReached = false
+        self.endPointReached = False
 
         self.currentNode = None
         self.nextCurrentNode = None
 
     def move(self):
         # 1. mark all positions of the Grid as unvisited, except for the current node
-        for row in self.copyOfGrid:
+        for row in self.grid:
             for element in row:
                 if type(element) is not Start:
-                    element.set_cost(9999)
+                    # element.set_cost(9999)
                     self.unvisitedList.append(element)
                 else: #type is Start
                     self.visitedList.append(element)
@@ -58,34 +60,48 @@ class Dijkstra:
         #   - initialize the Dijkstra class within 'main' 
         #   - use this Dijkstra move method within the while loop of 'main'
         while not self.endPointReached:
-            counter = 0
             for element in self.unvisitedList:
-                if self.element_adjacent_to_current_node:
+                # ! element had x 9 en y 9, maar opeens werd dit x 0 en y 0 na de volgende if?
+                # if self.element_adjacent_to_current_node:
+                if (((self.currentNode.get_x() == element.get_x()) and ((self.currentNode.get_y() + 1) == element.get_y()))
+                or ((self.currentNode.get_x() == element.get_x()) and ((self.currentNode.get_y() - 1) == element.get_y()))
+                or (((self.currentNode.get_x() + 1) == element.get_x()) and (self.currentNode.get_y() == element.get_y()))
+                or (((self.currentNode.get_x() - 1) == element.get_x()) and (self.currentNode.get_y() == element.get_y()))):
                     if type(element) is not End:
-                        if counter == 0:
-                            element.set_cost(self.currentCost + self.grid[element.get_x()][element.get_y()].get_cost())
+                        if self.counter == 0:
+                            # ! original grid was getting updated as well when you were updating the copyOfGrid values
+                            # only use this method below if you set_cost to 9999 for every element at the beginning within the copy of the grid
+                            # element.set_cost(self.currentCost + self.grid[element.get_x()][element.get_y()].get_cost())
+
+                            element.set_cost(self.currentCost + element.get_cost())
                             self.lowestCost = element.get_cost()
                             self.nextCurrentNode = element
                             self.visitedList.append(element)
                             self.unvisitedList.remove(element)
 
                         else:
-                            element.set_cost(self.currentCost + self.grid[element.get_x()][element.get_y()].get_cost())
+                            # only use this method below if you set_cost to 9999 for every element at the beginning within the copy of the grid
+                            # element.set_cost(self.currentCost + self.grid[element.get_x()][element.get_y()].get_cost())
+
+                            element.set_cost(self.currentCost + element.get_cost())
                             if element.get_cost() < self.lowestCost:
                                 self.lowestCost = element.get_cost()
                                 self.nextCurrentNode = element
                             self.visitedList.append(element)
                             self.unvisitedList.remove(element)
-                            # if 3 previous adjacent elements have been evaluated before this element, then this element is the 4th and final element to be evaluated
-                            # for the currentNode's position
-                            if counter == 3:
+                            # if 3 previous adjacent elements have been evaluated before this element, then the current element is the 4th and final element that has been
+                            # evaluated for the currentNode's position, so 
+                            if self.counter == 3:
                                 self.currentNode = self.nextCurrentNode
-                    else # if element is of type End:
-                        element.cost = self.currentCost + element.get_cost()
+                                # reset counter to -1 (counter is increased by 1 at the end of the loop) to start the loop again from the next currentNode position in a bit
+                                self.counter = -1
+                    else: # if element is of type End
+                        element.set_cost(self.currentCost + element.get_cost())
+                        # element.cost = self.currentCost + element.get_cost()
                         self.endpointReached = True
                         # TODO:
                             # - show total cost somewhere
-                    counter+=1
+                    self.counter+=1
 
         # 4. when done with considering unvisited neighbours of the current node, mark the current node as visited and remove it from the unvisited set
         # a visited node will never be checked again (because you will loop through the unvisited set)
@@ -98,10 +114,10 @@ class Dijkstra:
         # 
 
     def element_adjacent_to_current_node(self, element):
-        if currentNode.get_x() == element.get_x() and currentElement.get_y() + 1 == element.get_y()
-        or currentNode.get_x() == element.get_x() and currentElement.get_y() - 1 == element.get_y()
-        or currentNode.get_x() + 1 == element.get_x() and currentElement.get_y() == element.get_y()
-        or currentNode.get_x() - 1== element.get_x() and currentElement.get_y() == element.get_y():
+        if (((self.currentNode.get_x() == element.get_x()) and ((self.currentNode.get_y() + 1) == element.get_y()))
+        or ((self.currentNode.get_x() == element.get_x()) and ((self.currentNode.get_y() - 1) == element.get_y()))
+        or (((self.currentNode.get_x() + 1) == element.get_x()) and (self.currentNode.get_y() == element.get_y()))
+        or (((self.currentNode.get_x() - 1) == element.get_x()) and (self.currentNode.get_y() == element.get_y()))):
             return True
         else:
             return False
