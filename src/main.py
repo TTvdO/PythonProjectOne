@@ -13,20 +13,23 @@ def main():
     grid = Grid(Constants.SCREEN_WIDTH_AND_HEIGHT, 10)
     draw = Draw(SCREEN, grid.get_grid(), grid.get_room_per_block())
     draw.draw_grid()
+    pygame.display.flip()
 
-    dijkstra = Dijkstra(grid.get_grid())
+    dijkstra = Dijkstra(grid, draw)
 
     dijkstra.move()
 
-    # infinite loop for the program to run in until user exits program
-    while 1:
-        # monitor events
-        for event in pygame.event.get():
-            # exit when clicking on the X of the pop-up window
-            if event.type == pygame.QUIT: os._exit(1)
+    # # infinite loop for the program to run in until user exits program
+    # while 1:
+    #     # monitor events
+    #     for event in pygame.event.get():
+    #         # exit when clicking on the X of the pop-up window
+    #         if event.type == pygame.QUIT: os._exit(1)
 
-        # update screen based on inputs
-        pygame.display.flip()
+    #         dijkstra.move()
+
+    #     # update screen based on inputs
+        
 
 if __name__ == '__main__':
     main()

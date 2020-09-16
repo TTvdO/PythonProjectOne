@@ -1,7 +1,8 @@
-import sys
+import sys, pygame
 # necessary to be able to open import Grid from this file's location
 sys.path.append(".")
 from src.Grid import Grid
+from src.Draw import Draw
 from block_types import *
 from block_types.Block import Block
 from block_types.Forest import Forest
@@ -12,12 +13,19 @@ from block_types.End import End
 import copy
 
 class Dijkstra:
-    def __init__(self, grid):
+    def __init__(self, gridClass, draw):
         # use grid to get the actual costs of nodes within the Graph, 
         # to call the "draw_green_image()" method on nodes you're adding to the visitedList,
         # and to call the "set_cost" method on nodes you're adding to the visitedList 
-        self.grid = grid
+        self.gridClass = gridClass
+        self.grid = gridClass.get_grid()
+        self.draw = draw
+
         # use copyOfGrid to modify the costs of terrain temporarily within the unvisitedList
+
+        # ! original grid was getting updated as well when you were updating the copyOfGrid values, you need a deepcopy of the object
+        # or something similar. you can't just say self.copyOfGrid = self.grid, because you are just creating another reference to the grid
+        # instead of actually copying it, where modification doesn't impact it  
         # self.copyOfGrid = deepcopy(self.grid)
 
         self.unvisitedList = []
@@ -25,15 +33,16 @@ class Dijkstra:
 
         self.lowestCost = 0
         self.currentCost = 0
-        self.counter = 0
+        self.blocksTraversedFromCurrentNode = 0
 
         self.endPointReached = False
 
         self.currentNode = None
         self.nextCurrentNode = None
 
-    def move(self):
-        # 1. mark all positions of the Grid as unvisited, except for the current node
+        self.initialize_dijkstra()
+
+    def initialize_dijkstra(self):
         for row in self.grid:
             for element in row:
                 if type(element) is not Start:
@@ -42,6 +51,17 @@ class Dijkstra:
                 else: #type is Start
                     self.visitedList.append(element)
                     self.currentNode = element
+
+    def move(self):
+        # 1. mark all positions of the Grid as unvisited, except for the current node
+        # for row in self.grid:
+        #     for element in row:
+        #         if type(element) is not Start:
+        #             # element.set_cost(9999)
+        #             self.unvisitedList.append(element)
+        #         else: #type is Start
+        #             self.visitedList.append(element)
+        #             self.currentNode = element
 
         # 2. be able to set_cost of terrain for the Grid that the Dijkstra algorithm uses
         # make the cost of any terrain other than the starting position infinite (a.k.a. very high)
@@ -68,9 +88,8 @@ class Dijkstra:
                 or (((self.currentNode.get_x() + 1) == element.get_x()) and (self.currentNode.get_y() == element.get_y()))
                 or (((self.currentNode.get_x() - 1) == element.get_x()) and (self.currentNode.get_y() == element.get_y()))):
                     if type(element) is not End:
-                        if self.counter == 0:
-                            # ! original grid was getting updated as well when you were updating the copyOfGrid values
-                            # only use this method below if you set_cost to 9999 for every element at the beginning within the copy of the grid
+                        if self.blocksTraversedFromCurrentNode == 0:
+                            # only use this line below if you set_cost to 9999 for every element at the beginning within the copy of the grid
                             # element.set_cost(self.currentCost + self.grid[element.get_x()][element.get_y()].get_cost())
 
                             element.set_cost(self.currentCost + element.get_cost())
@@ -79,8 +98,14 @@ class Dijkstra:
                             self.visitedList.append(element)
                             self.unvisitedList.remove(element)
 
+                            # draw green image met als argumenten:
+                            # - x en y positie
+                            # - element.get_cost()
+                            self.draw.draw_green_image((element.get_x() * self.gridClass.get_room_per_block(), element.get_y() * self.gridClass.get_room_per_block()), element.get_cost())
+                            pygame.display.flip()
+
                         else:
-                            # only use this method below if you set_cost to 9999 for every element at the beginning within the copy of the grid
+                            # only use this line below if you set_cost to 9999 for every element at the beginning within the copy of the grid
                             # element.set_cost(self.currentCost + self.grid[element.get_x()][element.get_y()].get_cost())
 
                             element.set_cost(self.currentCost + element.get_cost())
@@ -89,19 +114,20 @@ class Dijkstra:
                                 self.nextCurrentNode = element
                             self.visitedList.append(element)
                             self.unvisitedList.remove(element)
-                            # if 3 previous adjacent elements have been evaluated before this element, then the current element is the 4th and final element that has been
-                            # evaluated for the currentNode's position, so 
-                            if self.counter == 3:
-                                self.currentNode = self.nextCurrentNode
-                                # reset counter to -1 (counter is increased by 1 at the end of the loop) to start the loop again from the next currentNode position in a bit
-                                self.counter = -1
+                            self.draw.draw_green_image((element.get_x() * self.gridClass.get_room_per_block(), element.get_y() * self.gridClass.get_room_per_block()), element.get_cost())
+                            pygame.display.flip()
                     else: # if element is of type End
                         element.set_cost(self.currentCost + element.get_cost())
+                        self.draw.draw_green_image((element.get_x() * self.gridClass.get_room_per_block(), element.get_y() * self.gridClass.get_room_per_block()), element.get_cost())
+                        pygame.display.flip()
                         # element.cost = self.currentCost + element.get_cost()
                         self.endpointReached = True
                         # TODO:
                             # - show total cost somewhere
-                    self.counter+=1
+                    self.blocksTraversedFromCurrentNode+=1
+                    if self.blocksTraversedFromCurrentNode == 4:
+                        self.currentNode = self.nextCurrentNode
+                        self.blocksTraversedFromCurrentNode = 0
 
         # 4. when done with considering unvisited neighbours of the current node, mark the current node as visited and remove it from the unvisited set
         # a visited node will never be checked again (because you will loop through the unvisited set)
