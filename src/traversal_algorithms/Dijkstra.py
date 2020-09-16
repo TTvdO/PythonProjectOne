@@ -25,15 +25,18 @@ class Dijkstra:
         self.visitedList = []
 
         self.nodesToIterateThrough = queue.Queue()
+        self.nodesToIterateBackThrough = queue.Queue()
 
         self.lowestCost = 0
         self.currentCost = 0
         self.blocksTraversedFromCurrentNode = 0
 
         self.endpointReached = False
+        self.traversedBackToStart = False
 
         self.currentNode = None
         self.nextCurrentNode = None
+        self.endNode = None
 
         self.initialize_dijkstra()
 
@@ -76,6 +79,7 @@ class Dijkstra:
                                     pygame.display.flip()
                                     
                     else: # if adjacentNode is of type End
+                        self.endNode = adjacentNode
                         costFromStartToAdjacentNode = currentNode.get_current_positional_cost() + adjacentNode.get_block_cost()
                         if costFromStartToAdjacentNode < adjacentNode.get_current_positional_cost():
                             adjacentNode.set_current_positional_cost(costFromStartToAdjacentNode)
@@ -86,7 +90,7 @@ class Dijkstra:
                             self.lowestCost = costFromStartToAdjacentNode
 
         # should be able to go here and not have the pygame screen minimize beforehand, if it does minimize, call this method in main after .move()
-        self.loop_back_to_start_for_visualization()
+        # self.traverse_back_to_start_for_visualization()
 
     def other_node_adjacent_to_current_node(self, currentNode, otherNode):
         if (((currentNode.get_x() == otherNode.get_x()) and ((currentNode.get_y() + 1) == otherNode.get_y()))
@@ -97,9 +101,36 @@ class Dijkstra:
         else:
             return False
 
-    def loop_back_to_start_for_visualization(self):
-        # TOIMPLEMENT
-        pass
+    def traverse_back_to_start_for_visualization(self):
+        self.nodesToIterateBackThrough.put(self.endNode)
+
+        while not self.traversedBackToStart:
+            currentNode = self.nodesToIterateThrough.get()
+            adjacentNodesVisited = 0
+            lowestAdjacentNodeCost = 0
+            nextCurrentNode = None
+            for otherNode in self.allNodesBesidesStart:
+                if self.other_node_adjacent_to_current_node(currentNode, otherNode):
+                    adjacentNode = otherNode
+                    if type(adjacentNode) is Start:
+                        # stop loop
+                        self.traversedBackToStart = True
+                    else:
+                        # check which adjacentNode out of the 4 adjacent nodes has the lowest cost
+                        if adjacentNodesVisited == 0:
+                            nextCurrentNode = adjacentNode
+                            lowestAdjacentNodeCost = adjacentNode.get_current_positional_cost()
+                        else:
+                            if adjacentNode.get_current_positional_cost < lowestAdjacentNodeCost:
+                                nextCurrentNode = adjacentNode
+                        adjacentNodesVisited += 1
+                        # when all 4 adjacent nodes have been checked, add the eventual "winner" of the 4 adjacent nodes to the queue of
+                        # nodes to iterate back through, and draw a black image over the position of this node
+                        if adjacentNodesVisited == 4:
+                            self.nodesToIterateBackThrough.put(nextCurrentNode)
+                            self.draw.draw_colored_image(Constants.BLACK_IMAGE, Constants.WHITE, (nextCurrentNode.get_x() * self.gridClass.get_room_per_block(), nextCurrentNode.get_y() * self.gridClass.get_room_per_block()),
+                                nextCurrentNode.get_block_cost(), nextCurrentNode.get_current_positional_cost())
+                            pygame.display.flip()
 
     def get_lowest_cost(self):
         return self.lowestCost
