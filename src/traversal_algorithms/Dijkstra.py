@@ -10,30 +10,20 @@ from block_types.Ground import Ground
 from block_types.Mountain import Mountain
 from block_types.Start import Start
 from block_types.End import End
+from Constants import Constants
 import queue
 import time
 
 class Dijkstra:
     def __init__(self, gridClass, draw):
-        # use grid to get the actual costs of nodes within the Graph, 
-        # to call the "draw_green_image()" method on nodes you're adding to the visitedList,
-        # and to call the "set_cost" method on nodes you're adding to the visitedList 
         self.gridClass = gridClass
         self.grid = gridClass.get_grid()
         self.draw = draw
-
-        # use copyOfGrid to modify the costs of terrain temporarily within the unvisitedList
-
-        # ! original grid was getting updated as well when you were updating the copyOfGrid values, you need a deepcopy of the object
-        # or something similar. you can't just say self.copyOfGrid = self.grid, because you are just creating another reference to the grid
-        # instead of actually copying it, where modification doesn't impact it  
-        # self.copyOfGrid = deepcopy(self.grid)
 
         self.allNodesBesidesStart = []
         self.unvisitedList = []
         self.visitedList = []
 
-        # self.queueOfNodes = queue.Queue(maxsize=(gridClass.rowsAndColumns*gridClass.rowsAndColumns))
         self.nodesToIterateThrough = queue.Queue()
 
         self.lowestCost = 0
@@ -60,39 +50,56 @@ class Dijkstra:
         while not self.nodesToIterateThrough.empty():
             currentNode = self.nodesToIterateThrough.get()
             for otherNode in self.allNodesBesidesStart:
-                if (((currentNode.get_x() == otherNode.get_x()) and ((currentNode.get_y() + 1) == otherNode.get_y()))
-                or ((currentNode.get_x() == otherNode.get_x()) and ((currentNode.get_y() - 1) == otherNode.get_y()))
-                or (((currentNode.get_x() + 1) == otherNode.get_x()) and (currentNode.get_y() == otherNode.get_y()))
-                or (((currentNode.get_x() - 1) == otherNode.get_x()) and (currentNode.get_y() == otherNode.get_y()))):
+                if self.other_node_adjacent_to_current_node(currentNode, otherNode):
                     adjacentNode = otherNode
                     if type(adjacentNode) is not End:
                             costFromStartToAdjacentNode = currentNode.get_current_positional_cost() + adjacentNode.get_block_cost()
-
                             if costFromStartToAdjacentNode < adjacentNode.get_current_positional_cost():
-                                adjacentNode.set_current_positional_cost(costFromStartToAdjacentNode)
-                                self.nodesToIterateThrough.put(adjacentNode)
-                                self.draw.draw_green_image((adjacentNode.get_x() * self.gridClass.get_room_per_block(), adjacentNode.get_y() * self.gridClass.get_room_per_block()),
-                                    adjacentNode.get_current_positional_cost())
-                                pygame.display.flip()
+                                # if you're overriding a previous lowest cost that was not the initial value, show that a better value has been found
+                                if adjacentNode.get_current_positional_cost() != 9999:
+                                    adjacentNode.set_current_positional_cost(costFromStartToAdjacentNode)
+                                    self.nodesToIterateThrough.put(adjacentNode)
+                                    self.draw.draw_colored_image(Constants.RED_IMAGE, Constants.GREEN, (adjacentNode.get_x() * self.gridClass.get_room_per_block(), adjacentNode.get_y() * self.gridClass.get_room_per_block()),
+                                        adjacentNode.get_block_cost(), adjacentNode.get_current_positional_cost())
+                                    pygame.display.flip()
+                                    # can uncomment to make it more obvious when a value is being overridden.
+                                    # time.sleep(0.3)
+                                    self.draw.draw_colored_image(Constants.GREEN_IMAGE, Constants.RED, (adjacentNode.get_x() * self.gridClass.get_room_per_block(), adjacentNode.get_y() * self.gridClass.get_room_per_block()),
+                                        adjacentNode.get_block_cost(), adjacentNode.get_current_positional_cost())
+                                    pygame.display.flip()
+                                # if this is the first time you've reached this point (positional cost of node is still the initial value), go through standard procedure
+                                else: 
+                                    adjacentNode.set_current_positional_cost(costFromStartToAdjacentNode)
+                                    self.nodesToIterateThrough.put(adjacentNode)
+                                    self.draw.draw_colored_image(Constants.GREEN_IMAGE, Constants.RED, (adjacentNode.get_x() * self.gridClass.get_room_per_block(), adjacentNode.get_y() * self.gridClass.get_room_per_block()),
+                                        adjacentNode.get_block_cost(), adjacentNode.get_current_positional_cost())
+                                    pygame.display.flip()
+                                    
                     else: # if adjacentNode is of type End
                         costFromStartToAdjacentNode = currentNode.get_current_positional_cost() + adjacentNode.get_block_cost()
                         if costFromStartToAdjacentNode < adjacentNode.get_current_positional_cost():
                             adjacentNode.set_current_positional_cost(costFromStartToAdjacentNode)
-                            self.lowestCost = costFromStartToAdjacentNode
                             self.nodesToIterateThrough.put(adjacentNode)
-                            self.draw.draw_red_image((adjacentNode.get_x() * self.gridClass.get_room_per_block(), adjacentNode.get_y() * self.gridClass.get_room_per_block()), adjacentNode.get_current_positional_cost())
+                            self.draw.draw_colored_image(Constants.BLACK_IMAGE, Constants.WHITE, (adjacentNode.get_x() * self.gridClass.get_room_per_block(), adjacentNode.get_y() * self.gridClass.get_room_per_block()),
+                                adjacentNode.get_block_cost(), adjacentNode.get_current_positional_cost())
                             pygame.display.flip()
-                            # TODO:
-                                # - show total eventual cost clearly, not only on the end block itself. also stop the program clearly, e.g.: pop-up screen
+                            self.lowestCost = costFromStartToAdjacentNode
 
-    def element_adjacent_to_current_node(self, currentNode, element):
-        if (((currentNode.get_x() == element.get_x()) and ((currentNode.get_y() + 1) == element.get_y()))
-            or ((currentNode.get_x() == element.get_x()) and ((currentNode.get_y() - 1) == element.get_y()))
-            or (((currentNode.get_x() + 1) == element.get_x()) and (currentNode.get_y() == element.get_y()))
-            or (((currentNode.get_x() - 1) == element.get_x()) and (currentNode.get_y() == element.get_y()))):
+        # should be able to go here and not have the pygame screen minimize beforehand, if it does minimize, call this method in main after .move()
+        self.loop_back_to_start_for_visualization()
+
+    def other_node_adjacent_to_current_node(self, currentNode, otherNode):
+        if (((currentNode.get_x() == otherNode.get_x()) and ((currentNode.get_y() + 1) == otherNode.get_y()))
+        or ((currentNode.get_x() == otherNode.get_x()) and ((currentNode.get_y() - 1) == otherNode.get_y()))
+        or (((currentNode.get_x() + 1) == otherNode.get_x()) and (currentNode.get_y() == otherNode.get_y()))
+        or (((currentNode.get_x() - 1) == otherNode.get_x()) and (currentNode.get_y() == otherNode.get_y()))):
             return True
         else:
             return False
+
+    def loop_back_to_start_for_visualization(self):
+        # TOIMPLEMENT
+        pass
 
     def get_lowest_cost(self):
         return self.lowestCost
