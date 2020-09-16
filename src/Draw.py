@@ -32,14 +32,12 @@ class Draw:
         image = pygame.image.load(element.get_image())
         imageScaled = pygame.transform.scale(image, (int(self.roomPerBlock), int(self.roomPerBlock)))
         self.screen.blit(imageScaled, posXandYtuple)
-        self.draw_text(posXandYtuple, f"{element.get_cost()}")
+        self.draw_text(posXandYtuple, f"{element.get_block_cost()}")
 
-    # can be used to show what path you've taken in the future. (not used yet)
     def draw_green_image(self, posXandYtuple, totalCost):
         greenImage = pygame.image.load(Constants.GREEN_IMAGE)
         greenImageScaled = pygame.transform.scale(greenImage, (int(self.roomPerBlock), int(self.roomPerBlock)))
-        self.screen.blit(greenImageScaled, posXandYtuple)
-        # value "0101" to be replaced by future value "totalCost", which is going to be the sum of the costs of traversed blocks
+        self.screen.blit(greenImageScaled, posXandYtuple[0] * int(self.roomPerBlock), posXandYtuple[1] * int(self.roomPerBlock))
         self.draw_text(posXandYtuple, f"{totalCost}")
 
     def draw_text(self, posXandYtuple, text):

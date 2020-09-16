@@ -6,7 +6,8 @@ class Block(object, metaclass=ABCMeta):
     def __init__(self, x, y):
         self.x = x
         self.y = y
-        self.cost = 0
+        self.block_cost = 0
+        self.positional_cost = 0
         self.image = ""
 
     # instead of specifying a route to the image ("/images/...") where successful loading depends on the location within the code the file is being opened, 
@@ -20,11 +21,17 @@ class Block(object, metaclass=ABCMeta):
     def get_y(self):
         return self.y
 
-    def get_cost(self):
-        return self.cost
+    def get_block_cost(self):
+        return self.block_cost
 
-    def set_cost(self, cost):
-        self.cost = cost
+    def set_block_cost(self, cost):
+        self.block_cost = cost
+
+    def get_positional_cost(self):
+        return self.positional_cost
+
+    def set_positional_cost(self, cost):
+        self.positional_cost = cost
 
     def get_image(self):
         return self.image

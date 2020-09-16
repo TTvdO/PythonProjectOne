@@ -48,7 +48,7 @@ class Dijkstra:
         for row in self.grid:
             for element in row:
                 if type(element) is not Start:
-                    element.set_cost(9999)
+                    element.set_positional_cost(9999)
                     self.unvisitedList.append(element)
                 else: #type is Start
                     self.visitedList.append(element)
@@ -65,63 +65,44 @@ class Dijkstra:
         # if current position A is marked with a distance of 6 and the edge connecting it with a neighbour B has a value of 2, then
         # distance to B is 6+2=8. IF B was previously marked higher than 8 (through traversing with a different route), then change the cost to 8
 
-        # TODO STILL IN THIS WHILE LOOP:
-        #   - call the method to draw a green block whenever you have added an element to the visitedList. use the element's x and y coordinates as arguments
-        #   - also the cost of that element on top of the method to draw a green block, this can be done by calling element.get_cost() from the element within the list after you have
-        #       added it to the visitedList
 
-        # TODO STILL WITHIN THE APPLICATION:
-        #   - initialize the Dijkstra class within 'main' 
-        #   - use this Dijkstra move method within the while loop of 'main'
         while not self.endPointReached:
+            # ADD extra loop here to loop through a Queue of nodes where node has been visited, but its adjacent nodes have not, then for every node in this queue
+            # you loop through the elements in the unvisitedlist to see if they're adjacent to the current node's position
+
+            # CHANGE: don't loop through every element in the unvisitedList anymore, because you won't be able to override a route that has a higher value at a certain
+            # node, due to not checking nodes that have already been visited.
+            # instead, just make a list of all nodes and for every single node position check all adjacent nodes, whether they've been visited or not does not matter.
             for element in self.unvisitedList:
-                # ! element had x 9 en y 9, maar opeens werd dit x 0 en y 0 na de volgende if?
                 # if self.element_adjacent_to_current_node:
                 if (((self.currentNode.get_x() == element.get_x()) and ((self.currentNode.get_y() + 1) == element.get_y()))
                 or ((self.currentNode.get_x() == element.get_x()) and ((self.currentNode.get_y() - 1) == element.get_y()))
                 or (((self.currentNode.get_x() + 1) == element.get_x()) and (self.currentNode.get_y() == element.get_y()))
                 or (((self.currentNode.get_x() - 1) == element.get_x()) and (self.currentNode.get_y() == element.get_y()))):
                     if type(element) is not End:
-                        if self.blocksTraversedFromCurrentNode == 0:
-                            # only use this line below if you set_cost to 9999 for every element at the beginning within the copy of the grid
-                            # element.set_cost(self.currentCost + self.grid[element.get_x()][element.get_y()].get_cost())
+                            # set positional cost of current element: positional cost of current node + block cost of current element 
+                            #element.set_positional_cost(NODE.get_positional_cost() + element.get_block_cost())
 
-                            element.set_cost(self.currentCost + element.get_cost())
-                            self.lowestCost = element.get_cost()
-                            self.nextCurrentNode = element
+                            # cost would be the node's current positional cost + the element's block cost
+                            tempCost = NODE.get_positional_cost() + element.get_block_cost()
+
+                            # if this cost is smaller than the element's positional cost (9999 if element hadn't been reached before yet, or if previous path was a higher cost
+                            # than this one)
+                            if tempCost < element.get_positional_cost():
+                                element.get_positional_cost() = tempCost
+                                ADD_ELEMENT_TO_QUEUE_OF_NODES_TO_LOOP_THROUGH
                             self.visitedList.append(element)
                             self.unvisitedList.remove(element)
-
-                            # draw green image met als argumenten:
-                            # - x en y positie
-                            # - element.get_cost()
-                            self.draw.draw_green_image((element.get_x() * self.gridClass.get_room_per_block(), element.get_y() * self.gridClass.get_room_per_block()), element.get_cost())
-                            pygame.display.flip()
-
-                        else:
-                            # only use this line below if you set_cost to 9999 for every element at the beginning within the copy of the grid
-                            # element.set_cost(self.currentCost + self.grid[element.get_x()][element.get_y()].get_cost())
-
-                            element.set_cost(self.currentCost + element.get_cost())
-                            if element.get_cost() < self.lowestCost:
-                                self.lowestCost = element.get_cost()
-                                self.nextCurrentNode = element
-                            self.visitedList.append(element)
-                            self.unvisitedList.remove(element)
-                            self.draw.draw_green_image((element.get_x() * self.gridClass.get_room_per_block(), element.get_y() * self.gridClass.get_room_per_block()), element.get_cost())
+                            self.draw.draw_green_image((element.get_x(), element.get_y()), element.get_positional_cost())
+                            # self.draw.draw_green_image((element.get_x() * self.gridClass.get_room_per_block(), element.get_y() * self.gridClass.get_room_per_block()), element.get_positional_cost())
                             pygame.display.flip()
                     else: # if element is of type End
-                        element.set_cost(self.currentCost + element.get_cost())
-                        self.draw.draw_green_image((element.get_x() * self.gridClass.get_room_per_block(), element.get_y() * self.gridClass.get_room_per_block()), element.get_cost())
+                        element.set_positional_cost(NODE.get_positional_cost() + element.get_block_cost())
+                        self.draw.draw_green_image((element.get_x(), element.get_y()), element.get_positional_cost())
                         pygame.display.flip()
-                        # element.cost = self.currentCost + element.get_cost()
                         self.endpointReached = True
                         # TODO:
-                            # - show total cost somewhere
-                    self.blocksTraversedFromCurrentNode+=1
-                    if self.blocksTraversedFromCurrentNode == 4:
-                        self.currentNode = self.nextCurrentNode
-                        self.blocksTraversedFromCurrentNode = 0
+                            # - show total eventual cost clearly, not only on the end block itself. also stop the program clearly, e.g.: pop-up screen
 
         # 4. when done with considering unvisited neighbours of the current node, mark the current node as visited and remove it from the unvisited set
         # a visited node will never be checked again (because you will loop through the unvisited set)
