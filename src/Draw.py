@@ -40,7 +40,18 @@ class Draw:
         self.screen.blit(greenImageScaled, posXandYtuple)
         self.draw_text(posXandYtuple, f"{totalCost}")
 
+    def draw_red_image(self, posXandYtuple, totalCost):
+        redImage = pygame.image.load(Constants.RED_IMAGE)
+        redImageScaled = pygame.transform.scale(redImage, (int(self.roomPerBlock), int(self.roomPerBlock)))
+        self.screen.blit(redImageScaled, posXandYtuple)
+        self.draw_text_green(posXandYtuple, f"{totalCost}")
+
     def draw_text(self, posXandYtuple, text):
         myfont = pygame.font.SysFont("Comic Sans MS", (int(self.roomPerBlock / 3)))
         label = myfont.render(f"{text}", 0, Constants.RED)
+        self.screen.blit(label, (posXandYtuple[0] + int(self.roomPerBlock / 2.5), posXandYtuple[1] + int(self.roomPerBlock / 4)))
+
+    def draw_text_green(self, posXandYtuple, text):
+        myfont = pygame.font.SysFont("Comic Sans MS", (int(self.roomPerBlock / 3)))
+        label = myfont.render(f"{text}", 0, Constants.GREEN)
         self.screen.blit(label, (posXandYtuple[0] + int(self.roomPerBlock / 2.5), posXandYtuple[1] + int(self.roomPerBlock / 4)))

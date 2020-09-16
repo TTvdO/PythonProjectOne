@@ -11,6 +11,7 @@ from block_types.Mountain import Mountain
 from block_types.Start import Start
 from block_types.End import End
 import queue
+import time
 
 class Dijkstra:
     def __init__(self, gridClass, draw):
@@ -67,7 +68,7 @@ class Dijkstra:
         # distance to B is 6+2=8. IF B was previously marked higher than 8 (through traversing with a different route), then change the cost to 8
 
 
-        while not self.endpointReached:
+        while not self.nodesToIterateThrough.empty():
             # ADD extra loop here to loop through a Queue of nodes where node has been visited, but its adjacent nodes have not, then for every node in this queue
             # you loop through the elements in the unvisitedlist to see if they're adjacent to the current node's position
             #for currentNode in self.nodesToIterateThrough:
@@ -94,15 +95,23 @@ class Dijkstra:
                             if costFromStartToAdjacentNode < adjacentNode.get_current_positional_cost():
                                 adjacentNode.set_current_positional_cost(costFromStartToAdjacentNode)
                                 self.nodesToIterateThrough.put(adjacentNode)
-                            # self.draw.draw_green_image((adjacentNode.get_x(), adjacentNode.get_y()), adjacentNode.get_current_positional_cost())
-                            self.draw.draw_green_image((adjacentNode.get_x() * self.gridClass.get_room_per_block(), adjacentNode.get_y() * self.gridClass.get_room_per_block()),
-                                adjacentNode.get_current_positional_cost())
-                            pygame.display.flip()
+                                # self.draw.draw_green_image((adjacentNode.get_x(), adjacentNode.get_y()), adjacentNode.get_current_positional_cost())
+                                self.draw.draw_green_image((adjacentNode.get_x() * self.gridClass.get_room_per_block(), adjacentNode.get_y() * self.gridClass.get_room_per_block()),
+                                    adjacentNode.get_current_positional_cost())
+                                pygame.display.flip()
                     else: # if adjacentNode is of type End
-                        adjacentNode.set_current_positional_cost(currentNode.get_current_positional_cost() + adjacentNode.get_block_cost())
-                        self.draw.draw_green_image((adjacentNode.get_x(), adjacentNode.get_y()), adjacentNode.get_current_positional_cost())
-                        pygame.display.flip()
-                        self.endpointReached = True
+                        costFromStartToAdjacentNode = currentNode.get_current_positional_cost() + adjacentNode.get_block_cost()
+
+                        # if this cost is smaller than the element's positional cost (9999 if element hadn't been reached before yet, or if previous path was a higher cost
+                        # than this one)
+                        if costFromStartToAdjacentNode < adjacentNode.get_current_positional_cost():
+                            adjacentNode.set_current_positional_cost(costFromStartToAdjacentNode)
+                            self.nodesToIterateThrough.put(adjacentNode)
+                            # adjacentNode.set_current_positional_cost(currentNode.get_current_positional_cost() + adjacentNode.get_block_cost())
+                            self.draw.draw_red_image((adjacentNode.get_x() * self.gridClass.get_room_per_block(), adjacentNode.get_y() * self.gridClass.get_room_per_block()), adjacentNode.get_current_positional_cost())
+                            pygame.display.flip()
+                        # time.sleep(10)
+                        # self.endpointReached = True
                         # TODO:
                             # - show total eventual cost clearly, not only on the end block itself. also stop the program clearly, e.g.: pop-up screen
 
