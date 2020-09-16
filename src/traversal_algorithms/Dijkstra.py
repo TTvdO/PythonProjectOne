@@ -10,7 +10,7 @@ from block_types.Ground import Ground
 from block_types.Mountain import Mountain
 from block_types.Start import Start
 from block_types.End import End
-import copy
+import queue
 
 class Dijkstra:
     def __init__(self, gridClass, draw):
@@ -31,6 +31,8 @@ class Dijkstra:
         self.unvisitedList = []
         self.visitedList = []
 
+        self.queueOfNodes = queue.Queue(maxsize=(gridClass.rowsAndColumns*gridClass.rowsAndColumns))
+
         self.lowestCost = 0
         self.currentCost = 0
         self.blocksTraversedFromCurrentNode = 0
@@ -46,7 +48,7 @@ class Dijkstra:
         for row in self.grid:
             for element in row:
                 if type(element) is not Start:
-                    # element.set_cost(9999)
+                    element.set_cost(9999)
                     self.unvisitedList.append(element)
                 else: #type is Start
                     self.visitedList.append(element)
@@ -54,14 +56,6 @@ class Dijkstra:
 
     def move(self):
         # 1. mark all positions of the Grid as unvisited, except for the current node
-        # for row in self.grid:
-        #     for element in row:
-        #         if type(element) is not Start:
-        #             # element.set_cost(9999)
-        #             self.unvisitedList.append(element)
-        #         else: #type is Start
-        #             self.visitedList.append(element)
-        #             self.currentNode = element
 
         # 2. be able to set_cost of terrain for the Grid that the Dijkstra algorithm uses
         # make the cost of any terrain other than the starting position infinite (a.k.a. very high)
