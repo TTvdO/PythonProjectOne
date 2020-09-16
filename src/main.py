@@ -4,6 +4,7 @@ from Constants import Constants
 from Draw import Draw
 from traversal_algorithms.Dijkstra import Dijkstra
 import queue
+import time
 
 def main():
     pygame.init()
@@ -18,19 +19,14 @@ def main():
 
     dijkstra = Dijkstra(grid, draw)
 
+    startOfTimer = time.perf_counter()
     dijkstra.move()
+    endOfTimer = time.perf_counter()
 
-    # # infinite loop for the program to run in until user exits program
-    # while 1:
-    #     # monitor events
-    #     for event in pygame.event.get():
-    #         # exit when clicking on the X of the pop-up window
-    #         if event.type == pygame.QUIT: os._exit(1)
+    print(f"the algorithm took {endOfTimer - startOfTimer:0.4f} seconds")
+    print(f"shortest path's cost: {dijkstra.get_lowest_cost()}")
 
-    #         dijkstra.move()
-
-    #     # update screen based on inputs
-        
+    time.sleep(10)
 
 if __name__ == '__main__':
     main()
