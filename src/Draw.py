@@ -37,7 +37,7 @@ class Draw:
     def draw_green_image(self, posXandYtuple, totalCost):
         greenImage = pygame.image.load(Constants.GREEN_IMAGE)
         greenImageScaled = pygame.transform.scale(greenImage, (int(self.roomPerBlock), int(self.roomPerBlock)))
-        self.screen.blit(greenImageScaled, posXandYtuple[0] * int(self.roomPerBlock), posXandYtuple[1] * int(self.roomPerBlock))
+        self.screen.blit(greenImageScaled, posXandYtuple)
         self.draw_text(posXandYtuple, f"{totalCost}")
 
     def draw_text(self, posXandYtuple, text):

@@ -3,6 +3,7 @@ from Grid import *
 from Constants import Constants
 from Draw import Draw
 from traversal_algorithms.Dijkstra import Dijkstra
+import queue
 
 def main():
     pygame.init()

@@ -27,10 +27,10 @@ class Block(object, metaclass=ABCMeta):
     def set_block_cost(self, cost):
         self.block_cost = cost
 
-    def get_positional_cost(self):
+    def get_current_positional_cost(self):
         return self.positional_cost
 
-    def set_positional_cost(self, cost):
+    def set_current_positional_cost(self, cost):
         self.positional_cost = cost
 
     def get_image(self):
