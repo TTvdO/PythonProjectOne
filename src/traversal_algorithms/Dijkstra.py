@@ -108,14 +108,8 @@ class Dijkstra:
                                                 currentNode.get_block_cost(), currentNode.get_current_positional_cost())
 
                     self.check_amount_of_adjacent_blocks(currentNode)
-
-                    if self.twoAdjacentBlocks:
-                        self.adjacentNodesToVisit = 2
-                    elif self.threeAdjacentBlocks:
-                        self.adjacentNodesToVisit = 3
-                    else:
-                        self.adjacentNodesToVisit = 4
-
+                    self.update_adjacent_blocks_booleans()
+                    
                     for otherNode in self.allNodes:
                         if not self.traversedBackToStart:
                             if self.other_node_adjacent_to_current_node(currentNode, otherNode):
@@ -133,18 +127,15 @@ class Dijkstra:
                                         if adjacentNode.get_current_positional_cost() < self.lowestAdjacentNodeCost:
                                             self.nextCurrentNode = adjacentNode
                                             self.lowestAdjacentNodeCost = adjacentNode.get_current_positional_cost()
-                                    else: # self.adjacentNodesToVisit == 0
+                                    else: # self.adjacentNodesToVisit == 0, 
+                                        # put the node with the lowest cost out of the evaluated adjacent blocks as the next node in the queue to evaluate adjacent nodes for
+                                        # and draw a black image over this position after calling .get() before this for loop is activated
                                         if adjacentNode.get_current_positional_cost() < self.lowestAdjacentNodeCost:
                                             self.nextCurrentNode = adjacentNode
                                         self.nodesToIterateBackThrough.put(self.nextCurrentNode)
                                         pygame.display.flip()
                                         
-                                        if self.twoAdjacentBlocks:
-                                            self.adjacentNodesToVisit = 2
-                                        elif self.threeAdjacentBlocks:
-                                            self.adjacentNodesToVisit = 3
-                                        else:
-                                            self.adjacentNodesToVisit = 4
+                                        self.update_adjacent_blocks_booleans()
 
                                         self.lowestAdjacentNodeCost = 9999
                                         # time.sleep(0.25)
@@ -185,6 +176,14 @@ class Dijkstra:
             self.twoAdjacentBlocks = False
             self.threeAdjacentBlocks = False
             self.fourAdjacentBlocks = True
+
+    def update_adjacent_blocks_booleans(self):
+        if self.twoAdjacentBlocks:
+            self.adjacentNodesToVisit = 2
+        elif self.threeAdjacentBlocks:
+            self.adjacentNodesToVisit = 3
+        else:
+            self.adjacentNodesToVisit = 4
 
     def get_lowest_cost(self):
         return self.lowestCost
