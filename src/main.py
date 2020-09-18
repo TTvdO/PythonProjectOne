@@ -27,7 +27,7 @@ def main():
     print(f"the algorithm took {endOfTimer - startOfTimer:0.4f} seconds")
     print(f"shortest path's cost: {dijkstra.get_lowest_cost()}")
 
-    time.sleep(10)
+    time.sleep(50)
 
 if __name__ == '__main__':
     main()

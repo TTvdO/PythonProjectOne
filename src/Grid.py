@@ -57,5 +57,8 @@ class Grid:
     def get_room_per_block(self):
         return self.roomPerBlock
 
+    def get_amount_of_rows_and_columns(self):
+        return self.rowsAndColumns
+
     def get_grid(self):
         return self.grid
