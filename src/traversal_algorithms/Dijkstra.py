@@ -93,6 +93,7 @@ class Dijkstra:
                             costFromStartToAdjacentNode = currentNode.get_current_positional_cost() + adjacentNode.get_block_cost()
                             if costFromStartToAdjacentNode < adjacentNode.get_current_positional_cost():
                                 adjacentNode.set_current_positional_cost(costFromStartToAdjacentNode)
+                                self.nodesToIterateThrough.put(adjacentNode)
                                 self.draw.draw_colored_image(Constants.BLACK_IMAGE, Constants.WHITE, (adjacentNode.get_x() * self.gridClass.get_room_per_block(), adjacentNode.get_y() * self.gridClass.get_room_per_block()),
                                     adjacentNode.get_block_cost(), adjacentNode.get_current_positional_cost())
                                 pygame.display.flip()
