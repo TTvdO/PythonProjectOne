@@ -21,7 +21,6 @@ def main():
 
     startOfTimer = time.perf_counter()
     dijkstra.move()
-    # dijkstra.traverse_back_to_start_for_visualization()
     endOfTimer = time.perf_counter()
 
     print(f"the algorithm took {endOfTimer - startOfTimer:0.4f} seconds")
