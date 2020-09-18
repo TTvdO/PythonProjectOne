@@ -110,15 +110,17 @@ class Dijkstra:
                     self.check_amount_of_adjacent_blocks(currentNode)
 
                     if self.twoAdjacentBlocks:
-                        self.adjacentNodesToVisit = 1
-                    elif self.threeAdjacentBlocks:
                         self.adjacentNodesToVisit = 2
-                    else:
+                    elif self.threeAdjacentBlocks:
                         self.adjacentNodesToVisit = 3
+                    else:
+                        self.adjacentNodesToVisit = 4
 
                     for otherNode in self.allNodes:
                         if not self.traversedBackToStart:
                             if self.other_node_adjacent_to_current_node(currentNode, otherNode):
+                                self.adjacentNodesToVisit -= 1
+
                                 adjacentNode = otherNode
 
                                 if type(adjacentNode) is Start:
@@ -146,7 +148,6 @@ class Dijkstra:
 
                                         self.lowestAdjacentNodeCost = 9999
                                         # time.sleep(0.25)
-                                self.adjacentNodesToVisit -= 1
 
     def other_node_adjacent_to_current_node(self, currentNode, otherNode):
         if (((currentNode.get_x() == otherNode.get_x()) and ((currentNode.get_y() + 1) == otherNode.get_y()))
