@@ -21,13 +21,13 @@ def main():
 
     startOfTimer = time.perf_counter()
     dijkstra.move()
-    dijkstra.traverse_back_to_start_for_visualization()
+    # dijkstra.traverse_back_to_start_for_visualization()
     endOfTimer = time.perf_counter()
 
     print(f"the algorithm took {endOfTimer - startOfTimer:0.4f} seconds")
     print(f"shortest path's cost: {dijkstra.get_lowest_cost()}")
 
-    # time.sleep(10)
+    time.sleep(10)
 
 if __name__ == '__main__':
     main()
