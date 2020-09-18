@@ -38,7 +38,7 @@ class Dijkstra:
         self.traversedBackToStart = False
         self.twoAdjacentBlocks = False
         self.threeAdjacentBlocks = False
-        self.fourAdjacentBlocks = True
+        self.fourAdjacentBlocks = False
 
         self.currentNode = None
         self.nextCurrentNode = None
@@ -105,16 +105,24 @@ class Dijkstra:
                     currentNode = self.nodesToIterateBackThrough.get()
                     self.draw.draw_colored_image(Constants.BLACK_IMAGE, Constants.WHITE, (currentNode.get_x() * self.gridClass.get_room_per_block(), currentNode.get_y() * self.gridClass.get_room_per_block()),
                                                 currentNode.get_block_cost(), currentNode.get_current_positional_cost())
-                    # if 2 blocks check:
-                        # self.adjacentNodesVisited += 2
-                    # if 3 blocks method check:
-                        # self.adjacentNodesVisited += 1
+
                     self.check_amount_of_adjacent_blocks(currentNode)
+
+                    if self.twoAdjacentBlocks:
+                        # start at 3 out of 4 adjacent nodes visited (visit nodes 3, and 4)
+                        self.adjacentNodesVisited = 3
+                    elif self.threeAdjacentBlocks:
+                        # start at 2 out of 4 adjacent nodes visited (visit nodes 2, 3, and 4)
+                        self.adjacentNodesVisited = 2
+                    else:
+                        # start at 1 out of 4 adjacent nodes visited (visit nodes 1, 2, 3, and 4)
+                        self.adjacentNodesVisited = 1
+
                     for otherNode in self.allNodes:
                         if not self.traversedBackToStart:
                             if self.other_node_adjacent_to_current_node(currentNode, otherNode):
                                 adjacentNode = otherNode
-                                self.adjacentNodesVisited += 1
+
                                 if type(adjacentNode) is Start:
                                     self.draw.draw_colored_image(Constants.BLACK_IMAGE, Constants.WHITE, (adjacentNode.get_x() * self.gridClass.get_room_per_block(), adjacentNode.get_y() * self.gridClass.get_room_per_block()),
                                             adjacentNode.get_block_cost(), adjacentNode.get_current_positional_cost())
@@ -128,14 +136,19 @@ class Dijkstra:
                                     else: # self.adjacentNodesVisited == 4
                                         if adjacentNode.get_current_positional_cost() < self.lowestAdjacentNodeCost:
                                             self.nextCurrentNode = adjacentNode
-                                            self.lowestAdjacentNodeCost = adjacentNode.get_current_positional_cost()
-                                            self.nodesToIterateBackThrough.put(self.nextCurrentNode)
-                                        else:
-                                            self.nodesToIterateBackThrough.put(self.nextCurrentNode)
+                                        self.nodesToIterateBackThrough.put(self.nextCurrentNode)
                                         pygame.display.flip()
-                                        self.adjacentNodesVisited = 0
+                                        
+                                        if self.twoAdjacentBlocks:
+                                            self.adjacentNodesVisited = 2
+                                        elif self.threeAdjacentBlocks:
+                                            self.adjacentNodesVisited = 1
+                                        else:
+                                            self.adjacentNodesVisited = 0
+
                                         self.lowestAdjacentNodeCost = 9999
                                         # time.sleep(0.25)
+                                self.adjacentNodesVisited += 1
 
     def other_node_adjacent_to_current_node(self, currentNode, otherNode):
         if (((currentNode.get_x() == otherNode.get_x()) and ((currentNode.get_y() + 1) == otherNode.get_y()))
@@ -148,17 +161,23 @@ class Dijkstra:
 
     def check_amount_of_adjacent_blocks(self, currentNode):
         # if currentNode resides in one of four corners: (0,0), (0, rowsAndColumns), (rowsAndColumns, 0), (rowsAndColumns, rowsAndColumns)
-        #  with only 2 adjacent blocks
+        # with only 2 adjacent blocks
         if ((currentNode.get_x() == 0 and currentNode.get_y() == 0)
-        or (currentNode.get_x() == 0 and (currentNode.get_y() - 1) == self.gridClass.get_amount_of_rows_and_columns())
-        or ((currentNode.get_x() - 1) == self.gridClass.get_amount_of_rows_and_columns() and currentNode.get_y() == 0)
-        or ((currentNode.get_x() - 1) == self.gridClass.get_amount_of_rows_and_columns() and (currentNode.get_y() - 1) == self.gridClass.get_amount_of_rows_and_columns())):
-            self.adjacentNodesVisited += 2
+        or (currentNode.get_x() == 0 and (currentNode.get_y() == (self.gridClass.get_amount_of_rows_and_columns() - 1)))
+        or (currentNode.get_x() == (self.gridClass.get_amount_of_rows_and_columns() - 1) and currentNode.get_y() == 0)
+        or ((currentNode.get_x() == (self.gridClass.get_amount_of_rows_and_columns() - 1)) and (currentNode.get_y() == (self.gridClass.get_amount_of_rows_and_columns() - 1)))):
+            self.twoAdjacentBlocks = True
+            self.threeAdjacentBlocks = False
+            self.fourAdjacentBlocks = False
         elif ((currentNode.get_x() == 0 or currentNode.get_y() == 0)
-            or ((currentNode.get_x() - 1) == self.gridClass.get_amount_of_rows_and_columns() or (currentNode.get_y() -  1) == self.gridClass.get_amount_of_rows_and_columns())):
-            self.adjacentNodesVisited += 1
+            or (currentNode.get_x() == (self.gridClass.get_amount_of_rows_and_columns() - 1 ) or (currentNode.get_y() == (self.gridClass.get_amount_of_rows_and_columns() - 1)))):
+            self.twoAdjacentBlocks = False
+            self.threeAdjacentBlocks = True
+            self.fourAdjacentBlocks = False
         else:
-            pass
+            self.twoAdjacentBlocks = False
+            self.threeAdjacentBlocks = False
+            self.fourAdjacentBlocks = True
                         
 
     def get_lowest_cost(self):
