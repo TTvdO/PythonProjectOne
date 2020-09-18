@@ -31,7 +31,7 @@ class Dijkstra:
         self.lowestCost = 0
         self.currentCost = 0
         self.blocksTraversedFromCurrentNode = 0
-        self.adjacentNodesVisited = 0
+        self.adjacentNodesToVisit = 4
         self.lowestAdjacentNodeCost = 9999
 
         self.endpointReached = False
@@ -110,14 +110,11 @@ class Dijkstra:
                     self.check_amount_of_adjacent_blocks(currentNode)
 
                     if self.twoAdjacentBlocks:
-                        # start at 3 out of 4 adjacent nodes visited (visit nodes 3, and 4)
-                        self.adjacentNodesVisited = 3
+                        self.adjacentNodesToVisit = 1
                     elif self.threeAdjacentBlocks:
-                        # start at 2 out of 4 adjacent nodes visited (visit nodes 2, 3, and 4)
-                        self.adjacentNodesVisited = 2
+                        self.adjacentNodesToVisit = 2
                     else:
-                        # start at 1 out of 4 adjacent nodes visited (visit nodes 1, 2, 3, and 4)
-                        self.adjacentNodesVisited = 1
+                        self.adjacentNodesToVisit = 3
 
                     for otherNode in self.allNodes:
                         if not self.traversedBackToStart:
@@ -130,26 +127,26 @@ class Dijkstra:
                                     pygame.display.flip()
                                     self.traversedBackToStart = True
                                 else:
-                                    if self.adjacentNodesVisited < 4:
+                                    if self.adjacentNodesToVisit > 0:
                                         if adjacentNode.get_current_positional_cost() < self.lowestAdjacentNodeCost:
                                             self.nextCurrentNode = adjacentNode
                                             self.lowestAdjacentNodeCost = adjacentNode.get_current_positional_cost()
-                                    else: # self.adjacentNodesVisited == 4
+                                    else: # self.adjacentNodesToVisit == 0
                                         if adjacentNode.get_current_positional_cost() < self.lowestAdjacentNodeCost:
                                             self.nextCurrentNode = adjacentNode
                                         self.nodesToIterateBackThrough.put(self.nextCurrentNode)
                                         pygame.display.flip()
                                         
                                         if self.twoAdjacentBlocks:
-                                            self.adjacentNodesVisited = 2
+                                            self.adjacentNodesToVisit = 2
                                         elif self.threeAdjacentBlocks:
-                                            self.adjacentNodesVisited = 1
+                                            self.adjacentNodesToVisit = 3
                                         else:
-                                            self.adjacentNodesVisited = 0
+                                            self.adjacentNodesToVisit = 4
 
                                         self.lowestAdjacentNodeCost = 9999
                                         # time.sleep(0.25)
-                                self.adjacentNodesVisited += 1
+                                self.adjacentNodesToVisit -= 1
 
     def other_node_adjacent_to_current_node(self, currentNode, otherNode):
         if (((currentNode.get_x() == otherNode.get_x()) and ((currentNode.get_y() + 1) == otherNode.get_y()))
@@ -161,8 +158,12 @@ class Dijkstra:
             return False
 
     def check_amount_of_adjacent_blocks(self, currentNode):
-        # if currentNode resides in one of four corners: (0,0), (0, rowsAndColumns), (rowsAndColumns, 0), (rowsAndColumns, rowsAndColumns)
-        # with only 2 adjacent blocks
+        # if currentNode resides in one of four corners: 
+        #   1-(0,0), 
+        #   2-(0, (amountOfRowsAndColumns - 1)), 
+        #   3-((amountOfRowsAndColumns - 1), 0), 
+        #   4-((amountOfRowsAndColumns - 1), (amountOfRowsAndColumns - 1))
+        # then this node only has two adjacent blocks
         if ((currentNode.get_x() == 0 and currentNode.get_y() == 0)
         or (currentNode.get_x() == 0 and (currentNode.get_y() == (self.gridClass.get_amount_of_rows_and_columns() - 1)))
         or (currentNode.get_x() == (self.gridClass.get_amount_of_rows_and_columns() - 1) and currentNode.get_y() == 0)
@@ -170,6 +171,10 @@ class Dijkstra:
             self.twoAdjacentBlocks = True
             self.threeAdjacentBlocks = False
             self.fourAdjacentBlocks = False
+        # if currentNodes resides at an edge: 
+        #   1- x or y = 0
+        #   2- x or y = (amountOfRowsAndColumns - 1))
+        # then this node only has three adjacent blocks 
         elif ((currentNode.get_x() == 0 or currentNode.get_y() == 0)
             or (currentNode.get_x() == (self.gridClass.get_amount_of_rows_and_columns() - 1 ) or (currentNode.get_y() == (self.gridClass.get_amount_of_rows_and_columns() - 1)))):
             self.twoAdjacentBlocks = False
@@ -179,7 +184,6 @@ class Dijkstra:
             self.twoAdjacentBlocks = False
             self.threeAdjacentBlocks = False
             self.fourAdjacentBlocks = True
-                        
 
     def get_lowest_cost(self):
         return self.lowestCost
