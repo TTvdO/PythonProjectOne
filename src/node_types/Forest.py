@@ -1,8 +1,8 @@
-from block_types.Block import Block
+from node_types.Node import Node
 from Constants import Constants
 
-class Forest(Block):
+class Forest(Node):
     def __init__(self, x, y):
         super().__init__(x, y)
-        self.block_cost = 3
+        self.edge_cost = 3
         self.image = super().transform_image_path(Constants.FOREST_IMAGE)
