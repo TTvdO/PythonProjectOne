@@ -55,36 +55,37 @@ class BreadthFirstSearch(TraversalAlgorithm):
             if not self.nodesToIterateThrough.empty():
                 currentNode = self.nodesToIterateThrough.get()
                 for otherNode in self.allNodesBesidesStart:
-                    if self.other_node_adjacent_to_current_node(currentNode, otherNode):
-                        adjacentNode = otherNode
-                        if type(adjacentNode) is not End:
+                    if otherNode.get_traversable() == True:
+                        if self.other_node_adjacent_to_current_node(currentNode, otherNode):
+                            adjacentNode = otherNode
+                            if type(adjacentNode) is not End:
+                                    costFromStartToAdjacentNode = currentNode.get_current_positional_cost() + adjacentNode.get_edge_cost()
+                                    if costFromStartToAdjacentNode < adjacentNode.get_current_positional_cost():
+                                        # if you're overriding a previous lowest cost that was not the initial value of that position, show that a better value has been found
+                                        if adjacentNode.get_current_positional_cost() != 9999:
+                                            adjacentNode.set_current_positional_cost(costFromStartToAdjacentNode)
+                                            self.nodesToIterateThrough.put(adjacentNode)
+                                            self.show_value_being_overridden(adjacentNode)
+                                        # else if this is the first time you've reached this point (positional cost of node is still the initial value), 
+                                        # go through standard procedure
+                                        else: 
+                                            adjacentNode.set_current_positional_cost(costFromStartToAdjacentNode)
+                                            self.nodesToIterateThrough.put(adjacentNode)
+                                            self.draw.draw_colored_image(Constants.GREEN_IMAGE, Constants.RED, (adjacentNode.get_x() * self.gridClass.get_room_per_node(), adjacentNode.get_y() * self.gridClass.get_room_per_node()),
+                                                adjacentNode.get_edge_cost(), adjacentNode.get_current_positional_cost())
+                                            pygame.display.flip()
+                                            
+                            else: # if adjacentNode is of type End
+                                self.endNode = adjacentNode
+                                self.nodesToIterateBackThrough.put(self.endNode)
                                 costFromStartToAdjacentNode = currentNode.get_current_positional_cost() + adjacentNode.get_edge_cost()
                                 if costFromStartToAdjacentNode < adjacentNode.get_current_positional_cost():
-                                    # if you're overriding a previous lowest cost that was not the initial value of that position, show that a better value has been found
-                                    if adjacentNode.get_current_positional_cost() != 9999:
-                                        adjacentNode.set_current_positional_cost(costFromStartToAdjacentNode)
-                                        self.nodesToIterateThrough.put(adjacentNode)
-                                        self.show_value_being_overridden(adjacentNode)
-                                    # else if this is the first time you've reached this point (positional cost of node is still the initial value), 
-                                    # go through standard procedure
-                                    else: 
-                                        adjacentNode.set_current_positional_cost(costFromStartToAdjacentNode)
-                                        self.nodesToIterateThrough.put(adjacentNode)
-                                        self.draw.draw_colored_image(Constants.GREEN_IMAGE, Constants.RED, (adjacentNode.get_x() * self.gridClass.get_room_per_node(), adjacentNode.get_y() * self.gridClass.get_room_per_node()),
-                                            adjacentNode.get_edge_cost(), adjacentNode.get_current_positional_cost())
-                                        pygame.display.flip()
-                                        
-                        else: # if adjacentNode is of type End
-                            self.endNode = adjacentNode
-                            self.nodesToIterateBackThrough.put(self.endNode)
-                            costFromStartToAdjacentNode = currentNode.get_current_positional_cost() + adjacentNode.get_edge_cost()
-                            if costFromStartToAdjacentNode < adjacentNode.get_current_positional_cost():
-                                adjacentNode.set_current_positional_cost(costFromStartToAdjacentNode)
-                                self.nodesToIterateThrough.put(adjacentNode)
-                                self.draw.draw_colored_image(Constants.BLACK_IMAGE, Constants.WHITE, (adjacentNode.get_x() * self.gridClass.get_room_per_node(), adjacentNode.get_y() * self.gridClass.get_room_per_node()),
-                                    adjacentNode.get_edge_cost(), adjacentNode.get_current_positional_cost())
-                                pygame.display.flip()
-                                self.lowestCost = costFromStartToAdjacentNode
+                                    adjacentNode.set_current_positional_cost(costFromStartToAdjacentNode)
+                                    self.nodesToIterateThrough.put(adjacentNode)
+                                    self.draw.draw_colored_image(Constants.BLACK_IMAGE, Constants.WHITE, (adjacentNode.get_x() * self.gridClass.get_room_per_node(), adjacentNode.get_y() * self.gridClass.get_room_per_node()),
+                                        adjacentNode.get_edge_cost(), adjacentNode.get_current_positional_cost())
+                                    pygame.display.flip()
+                                    self.lowestCost = costFromStartToAdjacentNode
             else: # if nodesToIterateThrough.empty(), show path from endpoint to startpoint
                 if not self.traversedBackToStart:
                     self.backtrack()
@@ -105,7 +106,6 @@ class BreadthFirstSearch(TraversalAlgorithm):
             if not self.traversedBackToStart:
                 if self.other_node_adjacent_to_current_node(currentNode, otherNode):
                     self.adjacentNodesToVisit -= 1
-
                     adjacentNode = otherNode
                     if type(adjacentNode) is Start:
                         self.draw.draw_colored_image(Constants.BLACK_IMAGE, Constants.WHITE, (adjacentNode.get_x() * self.gridClass.get_room_per_node(), 

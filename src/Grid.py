@@ -7,6 +7,7 @@ from node_types.Ground import Ground
 from node_types.Mountain import Mountain
 from node_types.Start import Start
 from node_types.End import End
+from node_types.Barricade import Barricade
 from Constants import Constants
 
 class Grid:
@@ -24,7 +25,7 @@ class Grid:
         self.grid = [[self.get_random_node(x, y) for x in range(self.rowsAndColumns)] for y in range(self.rowsAndColumns)]
 
     def get_random_node(self, x, y):
-        randomNumber = random.randrange(1, 48, 1)
+        randomNumber = random.randrange(1, 63, 1)
         # Create starting point at one index before the last if no starting point has been created yet before then
         if (self.amountOfNodesCreated == ((self.rowsAndColumns * self.rowsAndColumns) - 2)) and self.hasStartingPoint == False:
             node = Start(x, y)
@@ -39,13 +40,15 @@ class Grid:
             node = Ground(x, y)
         elif randomNumber > 30 and randomNumber <= 45:
             node = Mountain(x, y)
-        elif randomNumber == 46:
+        elif randomNumber > 45 and randomNumber <= 58:
+            node = Barricade(x,y)
+        elif randomNumber == 59 or randomNumber == 60:
             if self.hasStartingPoint == False:
                 node = Start(x, y)
                 self.hasStartingPoint = True
             else:
                 node = Ground(x, y)
-        else:
+        else: # if randomNumber == 61 or randomNumber == 62
             if self.hasEndPoint == False:
                 node = End(x, y)
                 self.hasEndPoint = True

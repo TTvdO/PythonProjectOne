@@ -2,17 +2,16 @@ import os, pygame
 from Grid import *
 from Constants import Constants
 from Draw import Draw
-from traversal_algorithms.BreadthFirstSearch import BreadthFirstSearch
-from traversal_algorithms.Dijkstra import Dijkstra
 import queue
 import time
 from Run import Run
 
 def main():
-    # CHANGE THIS VARIABLE TO CHANGE THE ALGORITHM BEING RAN. OPTIONS:
-    # -Constants.BFS
-    # -Constants.DIJKSTRA
-    TO_RUN = Constants.DIJKSTRA
+    # CHANGE THE Constants.TO_RUN VARIABLE TO CHANGE THE ALGORITHM BEING RAN. OPTIONS:
+    # BFS
+    # DIJKSTRA
+    # ASTAR
+    algorithmToRun = Constants.TO_RUN
 
     pygame.init()
     
@@ -26,10 +25,14 @@ def main():
 
     run = Run(grid, draw)
 
-    if TO_RUN == Constants.BFS:
+    if algorithmToRun == Constants.BFS:
         run.run_bfs()
-    elif TO_RUN == Constants.DIJKSTRA:
+    elif algorithmToRun == Constants.DIJKSTRA:
         run.run_dijkstra()
+    elif algorithmToRun == Constants.ASTAR:
+        run.run_astar()
+    else:
+        run.run_bfs()
 
 if __name__ == '__main__':
     main()
