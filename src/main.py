@@ -9,6 +9,9 @@ import time
 from Run import Run
 
 def main():
+    # CHANGE THIS VARIABLE TO CHANGE THE ALGORITHM BEING RAN. OPTIONS:
+    # -Constants.BFS
+    # -Constants.DIJKSTRA
     TO_RUN = Constants.DIJKSTRA
 
     pygame.init()
