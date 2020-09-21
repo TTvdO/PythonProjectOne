@@ -10,6 +10,9 @@ class Block(object, metaclass=ABCMeta):
         self.positional_cost = 0
         self.image = ""
 
+    def __lt__(self, other):
+        return self.block_cost <= other.block_cost
+
     # instead of specifying a route to the image ("/images/...") where successful loading depends on the location within the code the file is being opened, 
     # transform the image path to an absolute one (C//Users//....) that can be used anywhere within the code successfully
     def transform_image_path(self, file):

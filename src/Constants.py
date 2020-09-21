@@ -19,5 +19,8 @@ class Constants:
     RED_IMAGE = "src/images/red.jpg"
     BLACK_IMAGE = "src/images/black.jpg"
 
+    # "Dijkstra", "BFS", ""
+    TO_RUN = "Dijkstra"
+
     def __init__(self):
         pass

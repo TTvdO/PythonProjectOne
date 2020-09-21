@@ -2,9 +2,11 @@ import os, pygame
 from Grid import *
 from Constants import Constants
 from Draw import Draw
+from traversal_algorithms.BreadthFirstSearch import BreadthFirstSearch
 from traversal_algorithms.Dijkstra import Dijkstra
 import queue
 import time
+from Run import Run
 
 def main():
     pygame.init()
@@ -17,16 +19,23 @@ def main():
     draw.draw_grid()
     pygame.display.flip()
 
-    dijkstra = Dijkstra(grid, draw)
+    run = Run(grid, draw)
 
-    startOfTimer = time.perf_counter()
-    dijkstra.move()
-    endOfTimer = time.perf_counter()
+    if Constants.TO_RUN == "BFS":
+        run.run_bfs()
+    elif Constants.TO_RUN == "Dijkstra":
+        run.run_dijkstra()
 
-    print(f"the algorithm took {endOfTimer - startOfTimer:0.4f} seconds")
-    print(f"shortest path's cost: {dijkstra.get_lowest_cost()}")
+    # bfs = BreadthFirstSearch(grid, draw)
 
-    time.sleep(50)
+    # startOfTimer = time.perf_counter()
+    # bfs.move()
+    # endOfTimer = time.perf_counter()
+
+    # print(f"the algorithm took {endOfTimer - startOfTimer:0.4f} seconds")
+    # print(f"shortest path's cost: {bfs.get_lowest_cost()}")
+
+    # time.sleep(50)
 
 if __name__ == '__main__':
     main()
