@@ -38,9 +38,9 @@ class Dijkstra:
         self.startNode = None
         self.endNode = None
 
-        self.initialize_bfs()
+        self.initialize_dijkstra()
 
-    def initialize_bfs(self):
+    def initialize_dijkstra(self):
         for row in self.grid:
             for element in row:
                 if type(element) is not Start:
@@ -54,8 +54,9 @@ class Dijkstra:
         while not self.nodesToIterateThrough.empty():
             currentNode = self.nodesToIterateThrough.get()
             # uncomment to clearly show that dijkstra is selecting the node with lowest positional cost to evaluate adjacent nodes
-            time.sleep(1.5)
+            # time.sleep(1.5)
             for otherNode in self.allNodesBesidesStart:
+                # if otherNode.get_visited == False:
                 if self.other_node_adjacent_to_current_node(currentNode, otherNode):
                     adjacentNode = otherNode
                     if type(adjacentNode) is not End:
@@ -65,19 +66,24 @@ class Dijkstra:
                                 if adjacentNode.get_current_positional_cost() != 9999:
                                     adjacentNode.set_current_positional_cost(costFromStartToAdjacentNode)
                                     self.nodesToIterateThrough.put((costFromStartToAdjacentNode, adjacentNode))
-                                    self.draw.draw_colored_image(Constants.RED_IMAGE, Constants.GREEN, (adjacentNode.get_x() * self.gridClass.get_room_per_node(), adjacentNode.get_y() * self.gridClass.get_room_per_node()),
-                                        adjacentNode.get_edge_cost(), adjacentNode.get_current_positional_cost())
-                                    pygame.display.flip()
-                                    # can uncomment to make it more obvious when a value is being overridden.
-                                    #time.sleep(0.25)
-                                    self.draw.draw_colored_image(Constants.GREEN_IMAGE, Constants.RED, (adjacentNode.get_x() * self.gridClass.get_room_per_node(), adjacentNode.get_y() * self.gridClass.get_room_per_node()),
-                                        adjacentNode.get_edge_cost(), adjacentNode.get_current_positional_cost())
-                                    pygame.display.flip()
+                                    adjacentNode.set_predecessor_node(currentNode[1])
+
+                                    self.show_value_being_overridden(adjacentNode)
+                                    # self.draw.draw_colored_image(Constants.RED_IMAGE, Constants.GREEN, (adjacentNode.get_x() * self.gridClass.get_room_per_node(), adjacentNode.get_y() * self.gridClass.get_room_per_node()),
+                                    #     adjacentNode.get_edge_cost(), adjacentNode.get_current_positional_cost())
+                                    # pygame.display.flip()
+                                    # # can uncomment to make it more obvious when a value is being overridden.
+                                    # #time.sleep(0.25)
+                                    # self.draw.draw_colored_image(Constants.GREEN_IMAGE, Constants.RED, (adjacentNode.get_x() * self.gridClass.get_room_per_node(), adjacentNode.get_y() * self.gridClass.get_room_per_node()),
+                                    #     adjacentNode.get_edge_cost(), adjacentNode.get_current_positional_cost())
+                                    # pygame.display.flip()
 
                                 # else if this is the first time you've reached this point (positional cost of node is still the initial value), go through standard procedure
                                 else: 
                                     adjacentNode.set_current_positional_cost(costFromStartToAdjacentNode)
                                     self.nodesToIterateThrough.put((costFromStartToAdjacentNode, adjacentNode))
+                                    adjacentNode.set_predecessor_node(currentNode[1])
+
                                     self.draw.draw_colored_image(Constants.GREEN_IMAGE, Constants.RED, (adjacentNode.get_x() * self.gridClass.get_room_per_node(), adjacentNode.get_y() * self.gridClass.get_room_per_node()),
                                         adjacentNode.get_edge_cost(), adjacentNode.get_current_positional_cost())
                                     pygame.display.flip()
@@ -89,6 +95,7 @@ class Dijkstra:
                         if costFromStartToAdjacentNode < adjacentNode.get_current_positional_cost():
                             adjacentNode.set_current_positional_cost(costFromStartToAdjacentNode)
                             self.nodesToIterateThrough.put((costFromStartToAdjacentNode, adjacentNode))
+                            adjacentNode.set_predecessor_node(currentNode[1])
                             self.draw.draw_colored_image(Constants.BLACK_IMAGE, Constants.WHITE, (adjacentNode.get_x() * self.gridClass.get_room_per_node(), adjacentNode.get_y() * self.gridClass.get_room_per_node()),
                                 adjacentNode.get_edge_cost(), adjacentNode.get_current_positional_cost())
                             pygame.display.flip()
@@ -102,6 +109,16 @@ class Dijkstra:
             return True
         else:
             return False
+
+    def show_value_being_overridden(self, adjacentNode):
+        self.draw.draw_colored_image(Constants.RED_IMAGE, Constants.GREEN, (adjacentNode.get_x() * self.gridClass.get_room_per_node(), adjacentNode.get_y() * self.gridClass.get_room_per_node()),
+                                        adjacentNode.get_edge_cost(), adjacentNode.get_current_positional_cost())
+        pygame.display.flip()
+        # can uncomment to make it more obvious when a value is being overridden.
+        # time.sleep(0.25)
+        self.draw.draw_colored_image(Constants.GREEN_IMAGE, Constants.RED, (adjacentNode.get_x() * self.gridClass.get_room_per_node(), adjacentNode.get_y() * self.gridClass.get_room_per_node()),
+            adjacentNode.get_edge_cost(), adjacentNode.get_current_positional_cost())
+        pygame.display.flip()
 
     def get_lowest_cost(self):
         return self.lowestCost

@@ -3,7 +3,7 @@ from Grid import *
 from Constants import Constants
 from Draw import Draw
 from traversal_algorithms.BreadthFirstSearch import BreadthFirstSearch
-# from traversal_algorithms.Dijkstra import Dijkstra
+from traversal_algorithms.Dijkstra import Dijkstra
 import queue
 import time
 from Run import Run

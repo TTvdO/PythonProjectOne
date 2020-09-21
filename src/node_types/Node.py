@@ -9,6 +9,8 @@ class Node(object, metaclass=ABCMeta):
         self.edge_cost = 0
         self.positional_cost = 0
         self.image = ""
+        self.visited = False
+        self.predecessor_node = None
 
     def __lt__(self, other):
         return self.edge_cost <= other.edge_cost
@@ -17,7 +19,7 @@ class Node(object, metaclass=ABCMeta):
     # transform the image path to an absolute one (C//Users//....) that can be used anywhere within the code successfully
     def transform_image_path(self, file):
         return os.path.realpath(file)
-    
+
     def get_x(self):
         return self.x
 
@@ -38,3 +40,15 @@ class Node(object, metaclass=ABCMeta):
 
     def get_image(self):
         return self.image
+
+    def get_predecessor_node(self):
+        return self.predecessor_node
+    
+    def set_predecessor_node(self, Node):
+        predecessor_node = Node
+
+    def get_visited(self):
+        return self.visited
+    
+    def set_visited(self, trueOrFalse):
+        visited = trueOrFalse

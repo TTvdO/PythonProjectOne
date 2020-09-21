@@ -65,14 +65,16 @@ class BreadthFirstSearch:
                                     if adjacentNode.get_current_positional_cost() != 9999:
                                         adjacentNode.set_current_positional_cost(costFromStartToAdjacentNode)
                                         self.nodesToIterateThrough.put(adjacentNode)
-                                        self.draw.draw_colored_image(Constants.RED_IMAGE, Constants.GREEN, (adjacentNode.get_x() * self.gridClass.get_room_per_node(), adjacentNode.get_y() * self.gridClass.get_room_per_node()),
-                                            adjacentNode.get_edge_cost(), adjacentNode.get_current_positional_cost())
-                                        pygame.display.flip()
-                                        # can uncomment to make it more obvious when a value is being overridden.
-                                        #time.sleep(0.25)
-                                        self.draw.draw_colored_image(Constants.GREEN_IMAGE, Constants.RED, (adjacentNode.get_x() * self.gridClass.get_room_per_node(), adjacentNode.get_y() * self.gridClass.get_room_per_node()),
-                                            adjacentNode.get_edge_cost(), adjacentNode.get_current_positional_cost())
-                                        pygame.display.flip()
+
+                                        self.show_value_being_overridden(adjacentNode)
+                                        # self.draw.draw_colored_image(Constants.RED_IMAGE, Constants.GREEN, (adjacentNode.get_x() * self.gridClass.get_room_per_node(), adjacentNode.get_y() * self.gridClass.get_room_per_node()),
+                                        #     adjacentNode.get_edge_cost(), adjacentNode.get_current_positional_cost())
+                                        # pygame.display.flip()
+                                        # # can uncomment to make it more obvious when a value is being overridden.
+                                        # #time.sleep(0.25)
+                                        # self.draw.draw_colored_image(Constants.GREEN_IMAGE, Constants.RED, (adjacentNode.get_x() * self.gridClass.get_room_per_node(), adjacentNode.get_y() * self.gridClass.get_room_per_node()),
+                                        #     adjacentNode.get_edge_cost(), adjacentNode.get_current_positional_cost())
+                                        # pygame.display.flip()
 
                                     # else if this is the first time you've reached this point (positional cost of node is still the initial value), go through standard procedure
                                     else: 
@@ -105,6 +107,16 @@ class BreadthFirstSearch:
             return True
         else:
             return False
+
+    def show_value_being_overridden(self, adjacentNode):
+        self.draw.draw_colored_image(Constants.RED_IMAGE, Constants.GREEN, (adjacentNode.get_x() * self.gridClass.get_room_per_node(), adjacentNode.get_y() * self.gridClass.get_room_per_node()),
+                                        adjacentNode.get_edge_cost(), adjacentNode.get_current_positional_cost())
+        pygame.display.flip()
+        # can uncomment to make it more obvious when a value is being overridden.
+        #time.sleep(0.25)
+        self.draw.draw_colored_image(Constants.GREEN_IMAGE, Constants.RED, (adjacentNode.get_x() * self.gridClass.get_room_per_node(), adjacentNode.get_y() * self.gridClass.get_room_per_node()),
+            adjacentNode.get_edge_cost(), adjacentNode.get_current_positional_cost())
+        pygame.display.flip()
 
     def backtrack(self):
         self.allNodesBesidesStart.append(self.startNode)
