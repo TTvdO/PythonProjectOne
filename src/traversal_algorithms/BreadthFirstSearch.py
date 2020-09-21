@@ -122,6 +122,7 @@ class BreadthFirstSearch:
         self.allNodesBesidesStart.append(self.startNode)
         self.allNodes = self.allNodesBesidesStart
 
+        # self.nodesToIterateBackThrough.put(self.endNode)
         currentNode = self.nodesToIterateBackThrough.get()
         self.draw.draw_colored_image(Constants.BLACK_IMAGE, Constants.WHITE, (currentNode.get_x() * self.gridClass.get_room_per_node(), currentNode.get_y() * self.gridClass.get_room_per_node()),
                                     currentNode.get_edge_cost(), currentNode.get_current_positional_cost())

@@ -44,11 +44,11 @@ class Node(object, metaclass=ABCMeta):
     def get_predecessor_node(self):
         return self.predecessor_node
     
-    def set_predecessor_node(self, Node):
-        predecessor_node = Node
+    def set_predecessor_node(self, node):
+        self.predecessor_node = node
 
     def get_visited(self):
         return self.visited
     
     def set_visited(self, trueOrFalse):
-        visited = trueOrFalse
+        self.visited = trueOrFalse

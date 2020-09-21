@@ -28,16 +28,5 @@ def main():
     elif TO_RUN == Constants.DIJKSTRA:
         run.run_dijkstra()
 
-    # bfs = BreadthFirstSearch(grid, draw)
-
-    # startOfTimer = time.perf_counter()
-    # bfs.move()
-    # endOfTimer = time.perf_counter()
-
-    # print(f"the algorithm took {endOfTimer - startOfTimer:0.4f} seconds")
-    # print(f"shortest path's cost: {bfs.get_lowest_cost()}")
-
-    # time.sleep(50)
-
 if __name__ == '__main__':
     main()
