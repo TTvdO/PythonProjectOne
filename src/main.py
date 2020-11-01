@@ -11,7 +11,7 @@ def main():
     # -Constants.BFS
     # -Constants.DIJKSTRA
     # -Constants.ASTAR
-    TO_RUN = Constants.DIJKSTRA
+    TO_RUN = Constants.ASTAR
 
     pygame.init()
     
