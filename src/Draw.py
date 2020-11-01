@@ -34,6 +34,12 @@ class Draw:
         self.draw_text(textColor, posXandYtuple, f"{totalCost}")
         self.draw_text(textColor, (posXandYtuple[0] - int(self.roomPerNode / 8), posXandYtuple[1] + int(self.roomPerNode / 3)), f"({edgeCost})")
 
+    def draw_colored_image_astar(self, imageUrl, textColor, posXandYtuple, gCost, hCost, fCost):
+        self.draw_image(imageUrl, posXandYtuple)
+        self.draw_text(textColor, posXandYtuple, f"{fCost}")
+        self.draw_text(textColor, (posXandYtuple[0] - int(self.roomPerNode / 7), posXandYtuple[1] + int(self.roomPerNode / 3)), f"({gCost})")
+        self.draw_text(textColor, (posXandYtuple[0] - int(self.roomPerNode / 9), posXandYtuple[1] + int(self.roomPerNode / 3)), f"({hCost})")
+
     def draw_image(self, imageUrl, posXandYtuple):
         image = pygame.image.load(imageUrl)
         imageScaled = pygame.transform.scale(image, (int(self.roomPerNode), int(self.roomPerNode)))

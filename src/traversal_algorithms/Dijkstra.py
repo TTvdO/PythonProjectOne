@@ -48,6 +48,10 @@ class Dijkstra(TraversalAlgorithm):
         while not self.traversedBackToStart:
             if not self.nodesToIterateThrough.empty():
                 currentNodeTuple = self.nodesToIterateThrough.get()
+                self.draw.draw_colored_image(Constants.GREEN_IMAGE, Constants.RED, (currentNodeTuple[1].get_x() * self.gridClass.get_room_per_node(), 
+                                                currentNodeTuple[1].get_y() * self.gridClass.get_room_per_node()),
+                                                currentNodeTuple[1].get_edge_cost(), currentNodeTuple[1].get_current_positional_cost())
+                pygame.display.flip()
                 # uncomment line below to clearly show that dijkstra is selecting the node or one of the nodes 
                 # with the lowest positional cost to evaluate adjacent nodes for
                 # time.sleep(1.5)
@@ -59,23 +63,9 @@ class Dijkstra(TraversalAlgorithm):
                             if type(adjacentNode) is not End:
                                     costFromStartToAdjacentNode = currentNodeTuple[1].get_current_positional_cost() + adjacentNode.get_edge_cost()
                                     if costFromStartToAdjacentNode < adjacentNode.get_current_positional_cost():
-                                        # if you're overriding a previous lowest cost that was not the initial value of that position, 
-                                        # show that a better value has been found
-                                        if adjacentNode.get_current_positional_cost() != 9999:
                                             adjacentNode.set_current_positional_cost(costFromStartToAdjacentNode)
                                             adjacentNode.set_predecessor_node(currentNodeTuple[1])
                                             self.nodesToIterateThrough.put((costFromStartToAdjacentNode, adjacentNode))
-                                        # else if this is the first time you've reached this point (positional cost of node is still the initial value), 
-                                        # go through standard procedure
-                                        else: 
-                                            adjacentNode.set_current_positional_cost(costFromStartToAdjacentNode)
-                                            adjacentNode.set_predecessor_node(currentNodeTuple[1])
-                                            self.nodesToIterateThrough.put((costFromStartToAdjacentNode, adjacentNode))
-                                            self.draw.draw_colored_image(Constants.GREEN_IMAGE, Constants.RED, (adjacentNode.get_x() * self.gridClass.get_room_per_node(), 
-                                                adjacentNode.get_y() * self.gridClass.get_room_per_node()),
-                                                adjacentNode.get_edge_cost(), adjacentNode.get_current_positional_cost())
-                                            pygame.display.flip()
-                                            
                             else: # if adjacentNode is of type End
                                 costFromStartToAdjacentNode = currentNodeTuple[1].get_current_positional_cost() + adjacentNode.get_edge_cost()
                                 if costFromStartToAdjacentNode < adjacentNode.get_current_positional_cost():

@@ -21,9 +21,10 @@ class Constants:
 
     DIJKSTRA = "Dijkstra"
     BFS = "BFS"
+    ASTAR = "ASTAR"
 
     # "Dijkstra", "BFS", ""
-    TO_RUN = BFS
+    # TO_RUN = BFS
 
     def __init__(self):
         pass
