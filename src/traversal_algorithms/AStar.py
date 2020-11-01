@@ -49,13 +49,13 @@ class AStar(TraversalAlgorithm):
                     element.set_current_positional_cost(9999)
                     self.allNodesBesidesStart.append(element)
 
+    # TODO: change this to immediately start backtracking once the endpoint has been reached, stop exploring other options
     def move(self):
         while not self.traversedBackToStart:
             if not self.nodesToIterateThrough.empty():
                 currentNodeTuple = self.nodesToIterateThrough.get()
                 if type(currentNodeTuple[1]) is not Start:
-                    # TODO: change
-                    distanceFromCurrentNodeToEnd = self.get_manhattan_distance(currentNodeTuple[1], self.endNode)
+                    # TODO: change this to display the g, h, & f costs in the drawing
                     self.draw.draw_colored_image(Constants.GREEN_IMAGE, Constants.RED, (currentNodeTuple[1].get_x() * self.gridClass.get_room_per_node(),
                                                 currentNodeTuple[1].get_y() * self.gridClass.get_room_per_node()),
                                                 currentNodeTuple[1].get_edge_cost(), currentNodeTuple[1].get_current_positional_cost)
@@ -75,6 +75,7 @@ class AStar(TraversalAlgorithm):
                                     # -G COST: the manhattan distance from a specific node to the start node
                                     # -H COST: the manhattan distance from a specific node to the end node
                                     # -F COST: total manhattan distance (sum of g and h cost)
+                                    # TODO: if multiple f costs are the same, prioritize nodes based on lower H costs (nodes closer to end goal)
                                     gCost = self.get_manhattan_distance(adjacentNode, self.startNode)
                                     hCost = self.get_manhattan_distance(adjacentNode, self.endNode)
                                     fCost = gCost + hCost
@@ -84,12 +85,12 @@ class AStar(TraversalAlgorithm):
                                         self.nodesToIterateThrough.put((fCost, adjacentNode))
                             else: # if adjacentNode is of type End
                                 # distanceFromAdjacentNodeToEnd = self.get_manhattan_distance(adjacentNode, self.endNode)
-                                costFromStartToAdjacentNode = currentNodeTuple[1].get_current_positional_cost() + adjacentNode.get_edge_cost()
-                                if costFromStartToAdjacentNode < adjacentNode.get_current_positional_cost():
-                                    self.endNode.set_current_positional_cost(costFromStartToAdjacentNode)
+                                costFromStartToEndNode = currentNodeTuple[1].get_current_positional_cost() + adjacentNode.get_edge_cost()
+                                if costFromStartToEndNode < adjacentNode.get_current_positional_cost():
+                                    self.endNode.set_current_positional_cost(costFromStartToEndNode)
                                     self.endNode.set_predecessor_node(currentNodeTuple[1])
                                     self.nodesToIterateBackThrough.put(self.endNode)
-                                    self.draw.draw_colored_image(Constants.BLACK_IMAGE, Constants.WHITE, (adjacentNode.get_x() * self.gridClass.get_room_per_node(), 
+                                    self.draw.draw_colored_image(Constants.GREEN_IMAGE, Constants.RED, (adjacentNode.get_x() * self.gridClass.get_room_per_node(), 
                                         adjacentNode.get_y() * self.gridClass.get_room_per_node()),
                                         adjacentNode.get_edge_cost(), adjacentNode.get_current_positional_cost())
                                     pygame.display.flip()
