@@ -66,7 +66,7 @@ class AStar(TraversalAlgorithm):
                     pygame.display.flip()
                     # uncomment line below to clearly show that AStar is selecting the node or one of the nodes 
                     # with the lowest f cost to evaluate adjacent nodes for
-                    # time.sleep(.75)
+                    time.sleep(.25)
                     currentNodeTuple[1].set_visited(True)
                     for otherNode in self.allNodesBesidesStart:
                         if otherNode.get_visited() == False:

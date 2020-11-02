@@ -23,8 +23,11 @@ class Constants:
     BFS = "BFS"
     ASTAR = "ASTAR"
 
-    # "Dijkstra", "BFS", ""
-    # TO_RUN = BFS
+    # "BFS", "DIJKSTRA", "ASTAR"
+    TO_RUN = ASTAR
 
     def __init__(self):
         pass
+
+    def get_to_run(self):
+        return TO_RUN

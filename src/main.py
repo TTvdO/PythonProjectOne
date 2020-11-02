@@ -11,7 +11,7 @@ def main():
     # -Constants.BFS
     # -Constants.DIJKSTRA
     # -Constants.ASTAR
-    TO_RUN = Constants.ASTAR
+    algorithmToRun = Constants.TO_RUN
 
     pygame.init()
     
@@ -25,11 +25,11 @@ def main():
 
     run = Run(grid, draw)
 
-    if TO_RUN == Constants.BFS:
+    if algorithmToRun == Constants.BFS:
         run.run_bfs()
-    elif TO_RUN == Constants.DIJKSTRA:
+    elif algorithmToRun == Constants.DIJKSTRA:
         run.run_dijkstra()
-    elif TO_RUN == Constants.ASTAR:
+    elif algorithmToRun == Constants.ASTAR:
         run.run_astar()
 
 if __name__ == '__main__':

@@ -1,5 +1,6 @@
 from abc import ABCMeta, abstractmethod
 import os
+from Constants import Constants
 
 class Node(object, metaclass=ABCMeta):
     @abstractmethod
@@ -16,7 +17,15 @@ class Node(object, metaclass=ABCMeta):
         self.predecessor_node = None
 
     def __lt__(self, other):
-        return self.edge_cost <= other.edge_cost
+        # you want to change what this method does based on which algorithm is being ran.
+        # so, put a getter in main method, use that getter in this method to get which constant is being used
+        # then if constant_getter == Constants.ASTAR: ............
+        # else: return self.edge_cost <= other.edge_cost
+        # TODO: define how the comparison is done if algorithm used is AStar
+        if Constants.TO_RUN == Constants.ASTAR:
+            return self.h_cost <= other.h_cost
+        else: # if DFS or Dijkstra are being ran, compare edge costs
+            return self.edge_cost <= other.edge_cost
 
     # instead of specifying a route to the image ("/images/...") where successful loading depends on the location within the code the file is being opened, 
     # transform the image path to an absolute one (C//Users//....) that can be used anywhere within the code successfully
