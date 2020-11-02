@@ -13,18 +13,22 @@ class Constants:
     FOREST_IMAGE = "src/images/forest.jpg"
     GROUND_IMAGE = "src/images/ground.jpg"
     MOUNTAIN_IMAGE = "src/images/mountain.jpg"
-    START_IMAGE = "src/images/start.jpg"
+    START_IMAGE = "src/images/start.png"
 
     GREEN_IMAGE = "src/images/green.jpg"
     RED_IMAGE = "src/images/red.jpg"
     BLACK_IMAGE = "src/images/black.jpg"
 
-    DIJKSTRA = "Dijkstra"
     BFS = "BFS"
+    DIJKSTRA = "DIJKSTRA"
     ASTAR = "ASTAR"
 
-    # "BFS", "DIJKSTRA", "ASTAR"
-    TO_RUN = ASTAR
+    # CHANGE THIS TO_RUN VARIABLE TO CHANGE THE ALGORITHM BEING USED. 
+    # OPTIONS:
+    # -BFS
+    # -DIJKSTRA
+    # -ASTAR
+    TO_RUN = BFS
 
     def __init__(self):
         pass

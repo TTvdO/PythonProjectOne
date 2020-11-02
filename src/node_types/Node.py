@@ -17,13 +17,8 @@ class Node(object, metaclass=ABCMeta):
         self.predecessor_node = None
 
     def __lt__(self, other):
-        # you want to change what this method does based on which algorithm is being ran.
-        # so, put a getter in main method, use that getter in this method to get which constant is being used
-        # then if constant_getter == Constants.ASTAR: ............
-        # else: return self.edge_cost <= other.edge_cost
-        # TODO: define how the comparison is done if algorithm used is AStar
         if Constants.TO_RUN == Constants.ASTAR:
-            return self.h_cost <= other.h_cost
+            return (self.h_cost + self.edge_cost) <= (other.h_cost + other.edge_cost)
         else: # if DFS or Dijkstra are being ran, compare edge costs
             return self.edge_cost <= other.edge_cost
 

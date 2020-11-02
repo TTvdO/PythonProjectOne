@@ -7,10 +7,10 @@ import time
 from Run import Run
 
 def main():
-    # CHANGE THIS VARIABLE TO CHANGE THE ALGORITHM BEING RAN. OPTIONS:
-    # -Constants.BFS
-    # -Constants.DIJKSTRA
-    # -Constants.ASTAR
+    # CHANGE THE Constants.TO_RUN VARIABLE TO CHANGE THE ALGORITHM BEING RAN. OPTIONS:
+    # BFS
+    # DIJKSTRA
+    # ASTAR
     algorithmToRun = Constants.TO_RUN
 
     pygame.init()
@@ -31,6 +31,8 @@ def main():
         run.run_dijkstra()
     elif algorithmToRun == Constants.ASTAR:
         run.run_astar()
+    else:
+        run.run_bfs()
 
 if __name__ == '__main__':
     main()

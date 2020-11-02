@@ -48,10 +48,11 @@ class Dijkstra(TraversalAlgorithm):
         while not self.traversedBackToStart:
             if not self.nodesToIterateThrough.empty():
                 currentNodeTuple = self.nodesToIterateThrough.get()
-                self.draw.draw_colored_image(Constants.GREEN_IMAGE, Constants.RED, (currentNodeTuple[1].get_x() * self.gridClass.get_room_per_node(), 
-                                                currentNodeTuple[1].get_y() * self.gridClass.get_room_per_node()),
-                                                currentNodeTuple[1].get_edge_cost(), currentNodeTuple[1].get_current_positional_cost())
-                pygame.display.flip()
+                if type(currentNodeTuple[1]) is not Start:
+                    self.draw.draw_colored_image(Constants.GREEN_IMAGE, Constants.RED, (currentNodeTuple[1].get_x() * self.gridClass.get_room_per_node(), 
+                                                    currentNodeTuple[1].get_y() * self.gridClass.get_room_per_node()),
+                                                    currentNodeTuple[1].get_edge_cost(), currentNodeTuple[1].get_current_positional_cost())
+                    pygame.display.flip()
                 # uncomment line below to clearly show that dijkstra is selecting the node or one of the nodes 
                 # with the lowest positional cost to evaluate adjacent nodes for
                 # time.sleep(1.5)

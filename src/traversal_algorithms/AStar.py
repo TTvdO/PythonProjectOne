@@ -15,6 +15,17 @@ from Constants import Constants
 import queue
 import time
 
+# for A*, nodes are prioritized based on the A* heuristic in which the g, h, & f costs are used.
+# the g, h, & f costs represent:
+# -G COST: the manhattan distance from a specific node to the start node
+# -H COST: the manhattan distance from a specific node to the end node
+# -F COST: total manhattan distance (sum of g and h cost)
+
+# if multiple f costs are the same, nodes are prioritized within the PriorityQueue based on a combination of:
+# lower H costs (nodes closer to end goal)
+# lower edge costs
+# this can be seen in the Node.py class
+
 class AStar(TraversalAlgorithm):
     def __init__(self, gridClass, draw):
         super().__init__(gridClass, draw)
@@ -55,15 +66,11 @@ class AStar(TraversalAlgorithm):
             if not self.nodesToIterateThrough.empty():
                 if self.endPointReached == False:
                     currentNodeTuple = self.nodesToIterateThrough.get()
-                    if type(currentNodeTuple[1]) is Start:
-                        gCost = 0
-                        hCost = self.get_manhattan_distance(currentNodeTuple[1], self.endNode)
-                        currentNodeTuple[1].set_h_cost(hCost)
-                        currentNodeTuple[1].set_f_cost(hCost)
-                    self.draw.draw_colored_image_astar(Constants.GREEN_IMAGE, Constants.RED, (currentNodeTuple[1].get_x() * self.gridClass.get_room_per_node(),
-                                                    currentNodeTuple[1].get_y() * self.gridClass.get_room_per_node()),
-                                                    currentNodeTuple[1].get_g_cost(), currentNodeTuple[1].get_h_cost(), currentNodeTuple[1].get_current_f_cost())
-                    pygame.display.flip()
+                    if type(currentNodeTuple[1]) is not Start:
+                        self.draw.draw_colored_image_astar(Constants.GREEN_IMAGE, Constants.RED, (currentNodeTuple[1].get_x() * self.gridClass.get_room_per_node(),
+                                                        currentNodeTuple[1].get_y() * self.gridClass.get_room_per_node()),
+                                                        currentNodeTuple[1].get_g_cost(), currentNodeTuple[1].get_h_cost(), currentNodeTuple[1].get_current_f_cost())
+                        pygame.display.flip()
                     # uncomment line below to clearly show that AStar is selecting the node or one of the nodes 
                     # with the lowest f cost to evaluate adjacent nodes for
                     time.sleep(.25)
@@ -76,18 +83,6 @@ class AStar(TraversalAlgorithm):
                                 hCost = self.get_manhattan_distance(adjacentNode, self.endNode)
                                 fCost = gCost + hCost
                                 if type(adjacentNode) is not End:
-                                    # for A* you no longer want to prioritize nodes based on weighted costs (sum of edge costs), instead, 
-                                    # you want to prioritize based on the AStar heuristic in which the g, h, & f costs are used.
-                                    # the g, h, & f costs represent:
-                                    # -G COST: the manhattan distance from a specific node to the start node
-                                    # -H COST: the manhattan distance from a specific node to the end node
-                                    # -F COST: total manhattan distance (sum of g and h cost)
-                                    # TODO#1: if multiple f costs are the same, prioritize nodes based on lower H costs (nodes closer to end goal)
-                                    # TODO#2: if multiple h costs are the same, prioritize nodes based on lower edge costs
-                                    # combination of both TODO's at the same time is more optimal, actually.
-
-                                    # these TODO's comparisons should be handled within the Node class itself, where the f_costs, h_costs and edge_costs are all stored
-                                    # the priorityqueue will handle the sorting of priorities IF you clarify how these values should be compared in the Node class
                                     if fCost < adjacentNode.get_current_f_cost():
                                         adjacentNode.set_g_cost(gCost)
                                         adjacentNode.set_h_cost(hCost)
