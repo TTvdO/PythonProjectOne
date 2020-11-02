@@ -11,6 +11,7 @@ from node_types.Ground import Ground
 from node_types.Mountain import Mountain
 from node_types.Start import Start
 from node_types.End import End
+from node_types.Barricade import Barricade
 from Constants import Constants
 import queue
 import time
@@ -66,7 +67,7 @@ class AStar(TraversalAlgorithm):
             if not self.nodesToIterateThrough.empty():
                 if self.endPointReached == False:
                     currentNodeTuple = self.nodesToIterateThrough.get()
-                    if type(currentNodeTuple[1]) is not Start:
+                    if type(currentNodeTuple[1]) is not Start and type(currentNodeTuple) is not Barricade:
                         self.draw.draw_colored_image_astar(Constants.GREEN_IMAGE, Constants.RED, (currentNodeTuple[1].get_x() * self.gridClass.get_room_per_node(),
                                                         currentNodeTuple[1].get_y() * self.gridClass.get_room_per_node()),
                                                         currentNodeTuple[1].get_g_cost(), currentNodeTuple[1].get_h_cost(), currentNodeTuple[1].get_current_f_cost())
@@ -77,29 +78,30 @@ class AStar(TraversalAlgorithm):
                     currentNodeTuple[1].set_visited(True)
                     for otherNode in self.allNodesBesidesStart:
                         if otherNode.get_visited() == False:
-                            if self.other_node_adjacent_to_current_node(currentNodeTuple[1], otherNode):
-                                adjacentNode = otherNode
-                                gCost = self.get_manhattan_distance(adjacentNode, self.startNode)
-                                hCost = self.get_manhattan_distance(adjacentNode, self.endNode)
-                                fCost = gCost + hCost
-                                if type(adjacentNode) is not End:
-                                    if fCost < adjacentNode.get_current_f_cost():
-                                        adjacentNode.set_g_cost(gCost)
-                                        adjacentNode.set_h_cost(hCost)
-                                        adjacentNode.set_f_cost(fCost)
-                                        adjacentNode.set_predecessor_node(currentNodeTuple[1])
-                                        self.nodesToIterateThrough.put((fCost, adjacentNode))
-                                else: # if adjacentNode is of type End
-                                    self.endNode.set_g_cost(gCost)
-                                    self.endNode.set_h_cost(hCost)
-                                    self.endNode.set_f_cost(fCost)
-                                    self.endNode.set_predecessor_node(currentNodeTuple[1])
-                                    self.nodesToIterateBackThrough.put(self.endNode)
-                                    self.draw.draw_colored_image_astar(Constants.BLACK_IMAGE, Constants.WHITE, (adjacentNode.get_x() * self.gridClass.get_room_per_node(),
-                                        adjacentNode.get_y() * self.gridClass.get_room_per_node()),
-                                        adjacentNode.get_g_cost(), adjacentNode.get_h_cost(), adjacentNode.get_current_f_cost())
-                                    pygame.display.flip()
-                                    self.endPointReached = True
+                            if otherNode.get_traversable() == True:
+                                if self.other_node_adjacent_to_current_node(currentNodeTuple[1], otherNode):
+                                    adjacentNode = otherNode
+                                    gCost = self.get_manhattan_distance(adjacentNode, self.startNode)
+                                    hCost = self.get_manhattan_distance(adjacentNode, self.endNode)
+                                    fCost = gCost + hCost
+                                    if type(adjacentNode) is not End:
+                                        if fCost < adjacentNode.get_current_f_cost():
+                                            adjacentNode.set_g_cost(gCost)
+                                            adjacentNode.set_h_cost(hCost)
+                                            adjacentNode.set_f_cost(fCost)
+                                            adjacentNode.set_predecessor_node(currentNodeTuple[1])
+                                            self.nodesToIterateThrough.put((fCost, adjacentNode))
+                                    else: # if adjacentNode is of type End
+                                        self.endNode.set_g_cost(gCost)
+                                        self.endNode.set_h_cost(hCost)
+                                        self.endNode.set_f_cost(fCost)
+                                        self.endNode.set_predecessor_node(currentNodeTuple[1])
+                                        self.nodesToIterateBackThrough.put(self.endNode)
+                                        self.draw.draw_colored_image_astar(Constants.BLACK_IMAGE, Constants.WHITE, (adjacentNode.get_x() * self.gridClass.get_room_per_node(),
+                                            adjacentNode.get_y() * self.gridClass.get_room_per_node()),
+                                            adjacentNode.get_g_cost(), adjacentNode.get_h_cost(), adjacentNode.get_current_f_cost())
+                                        pygame.display.flip()
+                                        self.endPointReached = True
                 else: # if self.endPointReached == True, show path from endpoint to startpoint
                     if not self.traversedBackToStart:
                         self.backtrack()

@@ -14,6 +14,7 @@ class Constants:
     GROUND_IMAGE = "src/images/ground.jpg"
     MOUNTAIN_IMAGE = "src/images/mountain.jpg"
     START_IMAGE = "src/images/start.png"
+    BARRICADE_IMAGE = "src/images/barricade.png"
 
     GREEN_IMAGE = "src/images/green.jpg"
     RED_IMAGE = "src/images/red.jpg"

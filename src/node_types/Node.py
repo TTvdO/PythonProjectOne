@@ -15,6 +15,7 @@ class Node(object, metaclass=ABCMeta):
         self.image = ""
         self.visited = False
         self.predecessor_node = None
+        self.traversable = True
 
     def __lt__(self, other):
         if Constants.TO_RUN == Constants.ASTAR:
@@ -77,3 +78,6 @@ class Node(object, metaclass=ABCMeta):
     
     def set_visited(self, trueOrFalse):
         self.visited = trueOrFalse
+    
+    def get_traversable(self):
+        return self.traversable
